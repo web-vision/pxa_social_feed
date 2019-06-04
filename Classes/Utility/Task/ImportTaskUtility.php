@@ -111,11 +111,10 @@ class ImportTaskUtility
                         //getting data array from facebook graph api json result
                         // @codingStandardsIgnoreStart
                         $url = sprintf(
-                            self::FACEBOOK_API_URL . '%s/posts/?fields=likes.summary(true).limit(0),message,attachments,created_time,updated_time&limit=%d&access_token=%s|%s',
+                            self::FACEBOOK_API_URL . '%s/posts/?fields=likes.summary(true).limit(0),message,attachments,created_time,updated_time&limit=%d&access_token=%s',
                             $configuration->getSocialId(),
                             $configuration->getFeedsLimit(),
-                            $configuration->getToken()->getCredential('appId'),
-                            $configuration->getToken()->getCredential('appSecret')
+                            $configuration->getToken()->getCredential('appId')
                         );
                         // @codingStandardsIgnoreEnd
 
@@ -183,7 +182,7 @@ class ImportTaskUtility
                     case Token::YOUTUBE:
                         $url = sprintf(
                             self::YOUTUBE_API_URL .
-                                'search?order=date&part=snippet&type=video&maxResults=%d&channelId=%s&key=%s',
+                            'search?order=date&part=snippet&type=video&maxResults=%d&channelId=%s&key=%s',
                             $configuration->getFeedsLimit(),
                             $configuration->getSocialId(),
                             $configuration->getToken()->getCredential('apiKey')
@@ -412,8 +411,8 @@ class ImportTaskUtility
     /**
      * @param array $data
      * @param Configuration $configuration
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     private function saveInstagramFeed($data, Configuration $configuration)
     {
@@ -518,7 +517,7 @@ class ImportTaskUtility
 
         // Get media
         try {
-            $media  = $facebookSDKUtility->getInstagramFeed(
+            $media = $facebookSDKUtility->getInstagramFeed(
                 $instagramAccountId,
                 $limit ?? $configuration->getFeedsLimit()
             );
@@ -684,8 +683,8 @@ class ImportTaskUtility
     /**
      * @param array $data
      * @param Configuration $configuration
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     private function updateFacebookFeed($data, Configuration $configuration)
     {
@@ -726,6 +725,28 @@ class ImportTaskUtility
     }
 
     /**
+     * @param String $url
+     * @return string
+     */
+    private function saveImageLocally($url)
+    {
+        $filename = basename(parse_url($url)['path']);
+        $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        $storage = $resourceFactory->getDefaultStorage();
+        if (!$storage->getRootLevelFolder()->hasFolder('pxa_social_feed')) {
+            $storage->getRootLevelFolder()->createFolder('pxa_social_feed');
+        }
+        $newFile = $storage->createFile(
+            $filename,
+            $storage->getRootLevelFolder()->getSubfolder('pxa_social_feed')
+        );
+        $newFile->setContents(file_get_contents($url));
+
+
+        return $filename;
+    }
+
+    /**
      * @param Feed $feed
      * @param array $rawData
      */
@@ -736,9 +757,9 @@ class ImportTaskUtility
         }
 
         if (isset($rawData['attachments']['data'][0]['media']['image']['src'])) {
-            $feed->setImage($rawData['attachments']['data'][0]['media']['image']['src']);
+            $feed->setImage($this->saveImageLocally($rawData['attachments']['data'][0]['media']['image']['src']));
         } elseif (isset($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src'])) {
-            $feed->setImage($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src']);
+            $feed->setImage($this->saveImageLocally($rawData['attachments']['data'][0]['subattachments']['data'][0]['media']['image']['src']));
         }
         if (isset($rawData['attachments']['data'][0]['title'])) {
             $feed->setTitle($rawData['attachments']['data'][0]['title']);

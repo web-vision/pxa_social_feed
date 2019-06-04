@@ -77,18 +77,35 @@ class CleanUpTaskUtility
      */
     public function run($days)
     {
-        $obsoleteEntries = $this->getObsoleteEntries($days);
+        $obsoleteRecords = $this->getObsoleteRecords($days);
+        $obsoleteEntries = $this->getObsoleteEntries($obsoleteRecords);
+        $this->deleteImages($obsoleteRecords);
         $this->deleteObsoleteEntries($obsoleteEntries);
         $this->removeDeletedFeeds();
-
         return true;
+    }
+
+    /**
+     * @param $records
+     * @return void
+     */
+    protected function deleteImages($records)
+    {
+        $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        $storage = $resourceFactory->getDefaultStorage();
+        foreach ($records as $record) {
+            if ($storage->hasFile('pxa_social_feed/' . $record['image'])) {
+                $storage->deleteFile($storage->getFile('pxa_social_feed/' . $record['image']));
+            }
+
+        }
     }
 
     /**
      * @param int $days
      * @return array
      */
-    protected function getObsoleteEntries($days)
+    protected function getObsoleteRecords($days)
     {
         /** @var \DateTime $obsoleteDate */
         $obsoleteDate = GeneralUtility::makeInstance(\DateTime::class)->modify('-' . $days . ' days');
@@ -97,7 +114,7 @@ class CleanUpTaskUtility
             ->getQueryBuilderForTable(self::TABLE_FEED);
 
         $records = $queryBuilder
-            ->select('uid', 'configuration', 'crdate')
+            ->select('uid', 'configuration', 'crdate', 'image')
             ->from(self::TABLE_FEED)
             ->where(
                 $queryBuilder->expr()->lt(
@@ -111,6 +128,17 @@ class CleanUpTaskUtility
             ->orderBy('crdate')
             ->execute()
             ->fetchAll();
+
+        return $records;
+    }
+
+    /**
+     * @param $records
+     * @return array
+     */
+    protected function getObsoleteEntries($records)
+    {
+
 
         return $this->groupByConfigurations($records);
     }
