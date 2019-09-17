@@ -27,6 +27,7 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -104,6 +105,11 @@ class Feed extends AbstractEntity
      * @var string
      */
     protected $type = '';
+
+    /**
+     * @var string
+     */
+    protected $additionalImages = '';
 
     /**
      * token
@@ -317,5 +323,35 @@ class Feed extends AbstractEntity
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * Additional images as array
+     *
+     * @return array
+     */
+    public function getAdditionalImagesArray()
+    {
+        if (!empty($this->getAdditionalImages())) {
+            return GeneralUtility::trimExplode(',', $this->getAdditionalImages(), true);
+        }
+
+        return [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalImages()
+    {
+        return $this->additionalImages;
+    }
+
+    /**
+     * @param string $additionalImages
+     */
+    public function setAdditionalImages($additionalImages)
+    {
+        $this->additionalImages = $additionalImages;
     }
 }

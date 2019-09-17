@@ -198,7 +198,7 @@ class ImportTaskUtility
                         );
 
                         $data = json_decode(GeneralUtility::getUrl($url), true);
-                        
+
                         if (is_array($data)) {
                             $this->updateYoutubeFeed($data['items'], $configuration);
                         } else {
@@ -283,8 +283,8 @@ class ImportTaskUtility
     /**
      * @param array $data
      * @param Configuration $configuration
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     private function saveInstagramFeed($data, Configuration $configuration)
     {
@@ -322,8 +322,31 @@ class ImportTaskUtility
                 $instagram->setType((string)Token::INSTAGRAM_OAUTH2);
             }
 
+            $likes = intval($rawData['likes']['count']);
+            $additionalImages = '';
+            if (!empty($rawData['carousel_media']) && is_array($rawData['carousel_media'])) {
+                $carouselImages = array_filter(
+                    $rawData['carousel_media'],
+                    function ($item) {
+                        return $item['type'] === 'image';
+                    }
+                );
+                $additionalImages = implode(
+                    ',',
+                    array_map(
+                        function ($item) {
+                            return $item['images']['standard_resolution']['url'];
+                        },
+                        $carouselImages
+                    )
+                );
+            }
+
+            if ($additionalImages !== $instagram->getAdditionalImages()) {
+                $instagram->setAdditionalImages($additionalImages);
+            }
+
             if ($instagram->getUid()) {
-                $likes = intval($rawData['likes']['count']);
                 $image = $rawData['images']['standard_resolution']['url'];
 
                 if ($likes != $instagram->getLikes()) {
@@ -344,8 +367,8 @@ class ImportTaskUtility
     /**
      * @param array $data
      * @param Configuration $configuration
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     private function updateFacebookFeed($data, Configuration $configuration)
     {

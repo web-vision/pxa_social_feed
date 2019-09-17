@@ -34,7 +34,7 @@ return [
     ],
     // @codingStandardsIgnoreStart
     'interface' => [
-        'showRecordFieldList' => 'hidden, post_date, post_url, message, image, likes, title, configuration, update_date, external_identifier, starttime, endtime, type',
+        'showRecordFieldList' => 'hidden, post_date, post_url, message, image, additional_images, likes, title, configuration, update_date, external_identifier, starttime, endtime, type',
     ],
     'types' => [
         '0' => ['showitem' => '--palette--;;core, --palette--;;main, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime, endtime'],
@@ -45,7 +45,7 @@ return [
     ],
     'palettes' => [
         'core' => ['showitem' =>'hidden'],
-        'main' => ['showitem' => 'post_date, --linebreak--, title, --linebreak--, post_url, --linebreak--, message, --linebreak--, image, --linebreak--, likes, --linebreak--, configuration']
+        'main' => ['showitem' => 'post_date, --linebreak--, title, --linebreak--, post_url, --linebreak--, message, --linebreak--, image, --linebreak--, additional_images, --linebreak--, likes, --linebreak--, configuration']
     ],
     // @codingStandardsIgnoreEnd
     'columns' => [
@@ -126,6 +126,16 @@ return [
         'message' => [
             'exclude' => 1,
             'label' => $ll . 'tx_pxasocialfeed_domain_model_feeds.message',
+            'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 15,
+                'eval' => 'trim'
+            ]
+        ],
+        'additional_images' => [
+            'exclude' => 1,
+            'label' => 'Additional images',
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
