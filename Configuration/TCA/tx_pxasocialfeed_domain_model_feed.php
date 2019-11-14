@@ -50,7 +50,7 @@ return call_user_func(function () {
         'columns' => [
             'hidden' => [
                 'exclude' => 1,
-                'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+                'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
                 'config' => [
                     'type' => 'check',
                 ],
@@ -81,10 +81,10 @@ return call_user_func(function () {
                 'label' => $ll . 'tx_pxasocialfeed_domain_model_feeds.post_date',
                 'config' => [
                     'type' => 'input',
-                    'renderType' => 'inputDateTime',
-                    'size' => 12,
+                    'size' => 16,
+                    'max' => 20,
                     'eval' => 'datetime',
-                    'default' => null,
+                    'default' => 0,
                 ],
             ],
             'post_url' => [
