@@ -74,7 +74,11 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
         ];
 
         $additionalFields['pxasocialfeed_configs'] = [
-            'code' => SchedulerUtility::getAvailableConfigurationsSelectBox(isset($taskInfo['pxasocialfeed_configs']) ? $taskInfo['pxasocialfeed_configs'] : []),
+            'code' => SchedulerUtility::getAvailableConfigurationsSelectBox(
+                isset($taskInfo['pxasocialfeed_configs'])
+                    ? $taskInfo['pxasocialfeed_configs']
+                    : []
+            ),
             'label' => 'LLL:EXT:pxa_social_feed/Resources/Private/Language/locallang_be.xlf:scheduler.configs',
             'cshKey' => '',
             'cshLabel' => ''
@@ -130,7 +134,9 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
      */
     public function saveAdditionalFields(array $submittedData, AbstractTask $task)
     {
-        $task->setConfigurations(isset($submittedData['pxasocialfeed_configs']) ? $submittedData['pxasocialfeed_configs'] : []);
+        $task->setConfigurations(isset($submittedData['pxasocialfeed_configs'])
+            ? $submittedData['pxasocialfeed_configs']
+            : []);
         $task->setReceiverEmail($submittedData['pxasocialfeed_receiver_email']);
         $task->setSenderEmail($submittedData['pxasocialfeed_sender_email']);
         $task->setRunAllConfigurations((bool)$submittedData['pxasocialfeed_run_all_configs']);

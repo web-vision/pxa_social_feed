@@ -55,7 +55,9 @@ class YoutubeFeedUpdater extends BaseUpdater
             $feedItem->setMessage($this->encodeMessage($description));
         }
 
-        $image = isset($rawData['snippet']['thumbnails']['high']['url']) ? $rawData['snippet']['thumbnails']['high']['url'] : '';
+        $image = isset($rawData['snippet']['thumbnails']['high']['url'])
+            ? $rawData['snippet']['thumbnails']['high']['url']
+            : '';
         if ($image != $feedItem->getImage()) {
             $feedItem->setImage($image);
         }

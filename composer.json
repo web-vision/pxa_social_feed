@@ -18,6 +18,44 @@
     }
   ],
   "require": {
-    "typo3/cms-core": "^7.6"
+    "typo3/cms": "^7.6"
+  },
+  "require-dev": {
+    "nimut/testing-framework": "^2.0",
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pixelant\\PxaSocialFeed\\Tests\\": "Tests/"
+    }
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "preferred-install": {
+      "typo3/cms": "source"
+    },
+    "platform": {
+      "php": "5.5.0"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/Web/typo3conf/ext/",
+      "[ -L .Build/Web/typo3conf/ext/pxa_social_feed ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/pxa_social_feed"
+    ],
+    "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 --ignore='ext_localconf.php,class.ext_update.php' Classes/ *.php && .Build/bin/phpcs -n --standard=PSR2 Configuration/TCA/",
+    "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/",
+    "tests:all": "composer php:codesniffer && composer php:unittests"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.0.x-dev"
+    },
+    "typo3/cms": {
+      "extension-key": "pxa_social_feed",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
   }
 }

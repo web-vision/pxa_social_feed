@@ -82,7 +82,9 @@ class TwitterFeedUpdater extends BaseUpdater
         }
 
         // Media
-        $image = isset($rawData['entities']['media'][0]['media_url_https']) ? $rawData['entities']['media'][0]['media_url_https'] : '';
+        $image = isset($rawData['entities']['media'][0]['media_url_https'])
+            ? $rawData['entities']['media'][0]['media_url_https']
+            : '';
         if ($feedItem->getImage() != $image) {
             $feedItem->setImage($image);
         }
