@@ -5,6 +5,7 @@ namespace Pixelant\PxaSocialFeed\Tests\Unit\Service\Expire;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use Pixelant\PxaSocialFeed\Service\Expire\FacebookAccessTokenExpireService;
+use Pixelant\PxaSocialFeed\Tests\Unit\CreateMock;
 
 /**
  * Class FacebookAccessTokenExpireServiceTest
@@ -12,6 +13,8 @@ use Pixelant\PxaSocialFeed\Service\Expire\FacebookAccessTokenExpireService;
  */
 class FacebookAccessTokenExpireServiceTest extends UnitTestCase
 {
+    use CreateMock;
+
     /**
      * @var FacebookAccessTokenExpireService
      */
@@ -32,7 +35,7 @@ class FacebookAccessTokenExpireServiceTest extends UnitTestCase
      */
     public function hasExpiredReturnFalseIfTokenValid()
     {
-        $mockedToken = $this->createMock(Token::class);
+        $mockedToken = $this->createMockTrait(Token::class);
         $mockedToken
             ->expects($this->once())
             ->method('isValidFacebookAccessToken')
@@ -48,7 +51,7 @@ class FacebookAccessTokenExpireServiceTest extends UnitTestCase
      */
     public function hasExpiredReturnTrueIfTokenNotValid()
     {
-        $mockedToken = $this->createMock(Token::class);
+        $mockedToken = $this->createMockTrait(Token::class);
         $mockedToken
             ->expects($this->once())
             ->method('isValidFacebookAccessToken')
@@ -85,7 +88,7 @@ class FacebookAccessTokenExpireServiceTest extends UnitTestCase
     {
         $expireAt = (new \DateTime())->modify('+10 days');
 
-        $mockedToken = $this->createMock(Token::class);
+        $mockedToken = $this->createMockTrait(Token::class);
         $mockedToken
             ->expects($this->once())
             ->method('getFacebookAccessTokenMetadataExpirationDate')
@@ -101,7 +104,7 @@ class FacebookAccessTokenExpireServiceTest extends UnitTestCase
      */
     public function expireWhenReturnNumberZeroIfNoExpireDate()
     {
-        $mockedToken = $this->createMock(Token::class);
+        $mockedToken = $this->createMockTrait(Token::class);
         $mockedToken
             ->expects($this->once())
             ->method('getFacebookAccessTokenMetadataExpirationDate')
@@ -119,7 +122,7 @@ class FacebookAccessTokenExpireServiceTest extends UnitTestCase
     {
         $expireAt = (new \DateTime())->modify('-2 days');
 
-        $mockedToken = $this->createMock(Token::class);
+        $mockedToken = $this->createMockTrait(Token::class);
         $mockedToken
             ->expects($this->once())
             ->method('getFacebookAccessTokenMetadataExpirationDate')

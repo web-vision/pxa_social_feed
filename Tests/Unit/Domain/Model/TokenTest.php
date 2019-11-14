@@ -29,6 +29,7 @@ namespace Pixelant\PxaSocialFeed\Tests\Unit\Domain\Model;
 use Facebook\Authentication\AccessTokenMetadata;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
+use Pixelant\PxaSocialFeed\Tests\Unit\CreateMock;
 
 /**
  * Test case for class \Pixelant\PxaSocialFeed\Domain\Model\Token.
@@ -39,6 +40,8 @@ use Pixelant\PxaSocialFeed\Domain\Model\Token;
  */
 class TokenTest extends UnitTestCase
 {
+    use CreateMock;
+
     /**
      * @var Token
      */
@@ -248,7 +251,7 @@ class TokenTest extends UnitTestCase
     {
         $date = new \DateTime();
 
-        $mockedFacebookAccessTokenMetadata = $this->createMock(AccessTokenMetadata::class);
+        $mockedFacebookAccessTokenMetadata = $this->createMockTrait(AccessTokenMetadata::class);
         $mockedFacebookAccessTokenMetadata
             ->expects($this->once())
             ->method('getExpiresAt')
@@ -270,7 +273,7 @@ class TokenTest extends UnitTestCase
     {
         $date = new \DateTime();
 
-        $mockedFacebookAccessTokenMetadata = $this->createMock(AccessTokenMetadata::class);
+        $mockedFacebookAccessTokenMetadata = $this->createMockTrait(AccessTokenMetadata::class);
         $mockedFacebookAccessTokenMetadata
             ->expects($this->once())
             ->method('getExpiresAt')

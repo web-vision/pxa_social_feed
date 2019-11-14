@@ -7,6 +7,7 @@ use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use Pixelant\PxaSocialFeed\Feed\InstagramFactory;
 use Pixelant\PxaSocialFeed\Feed\Source\InstagramSource;
 use Pixelant\PxaSocialFeed\Feed\Update\InstagramFeedUpdater;
+use Pixelant\PxaSocialFeed\Tests\Unit\CreateMock;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -16,6 +17,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  */
 class InstagramFactoryTest extends UnitTestCase
 {
+    use CreateMock;
+
     /**
      * @var InstagramFactory
      */
@@ -28,7 +31,7 @@ class InstagramFactoryTest extends UnitTestCase
         $reflection = new \ReflectionProperty(GeneralUtility::class, 'singletonInstances');
         $reflection->setAccessible(true);
         $singletonInstances = $reflection->getValue();
-        $singletonInstances[ObjectManager::class] = $this->createMock(ObjectManager::class);
+        $singletonInstances[ObjectManager::class] = $this->createMockTrait(ObjectManager::class);
         $reflection->setValue(null, $singletonInstances);
     }
 

@@ -6,6 +6,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Pixelant\PxaSocialFeed\Domain\Model\Feed;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
 use Pixelant\PxaSocialFeed\Feed\Update\BaseUpdater;
+use Pixelant\PxaSocialFeed\Tests\Unit\CreateMock;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -14,6 +15,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class BaseUpdaterTest extends UnitTestCase
 {
+    use CreateMock;
+
     /**
      * @var BaseUpdater
      */
@@ -37,7 +40,7 @@ class BaseUpdaterTest extends UnitTestCase
         $feed = new Feed();
         $feedStorage = new ObjectStorage();
 
-        $this->inject($this->subject, 'feedRepository', $this->createMock(FeedRepository::class));
+        $this->inject($this->subject, 'feedRepository', $this->createMockTrait(FeedRepository::class));
         $this->inject($this->subject, 'feeds', $feedStorage);
 
         $this->subject->_call('addOrUpdateFeedItem', $feed);
@@ -51,14 +54,14 @@ class BaseUpdaterTest extends UnitTestCase
     public function addOrUpdateFeedItemCallAddOnNewItem()
     {
         $feed = new Feed();
-        $mockedRepository = $this->createMock(FeedRepository::class);
+        $mockedRepository = $this->createMockTrait(FeedRepository::class);
         $mockedRepository
             ->expects($this->once())
             ->method('add')
             ->with($feed);
 
         $this->inject($this->subject, 'feedRepository', $mockedRepository);
-        $this->inject($this->subject, 'feeds', $this->createMock(ObjectStorage::class));
+        $this->inject($this->subject, 'feeds', $this->createMockTrait(ObjectStorage::class));
 
         $this->subject->_call('addOrUpdateFeedItem', $feed);
     }
@@ -71,14 +74,14 @@ class BaseUpdaterTest extends UnitTestCase
         $feed = new Feed();
         $feed->_setProperty('uid', 1);
 
-        $mockedRepository = $this->createMock(FeedRepository::class);
+        $mockedRepository = $this->createMockTrait(FeedRepository::class);
         $mockedRepository
             ->expects($this->once())
             ->method('update')
             ->with($feed);
 
         $this->inject($this->subject, 'feedRepository', $mockedRepository);
-        $this->inject($this->subject, 'feeds', $this->createMock(ObjectStorage::class));
+        $this->inject($this->subject, 'feeds', $this->createMockTrait(ObjectStorage::class));
 
         $this->subject->_call('addOrUpdateFeedItem', $feed);
     }
