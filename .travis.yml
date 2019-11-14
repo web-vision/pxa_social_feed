@@ -19,7 +19,7 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer --version
-  - composer install --ignore-platform-reqs
+  - composer install
 
 script:
   # Run full test suite and linting of the code base
