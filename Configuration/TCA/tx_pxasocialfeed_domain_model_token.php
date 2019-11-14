@@ -1,7 +1,7 @@
 <?php
 defined('TYPO3_MODE') or die();
 
-return (function () {
+return call_user_func(function () {
     $ll = 'LLL:EXT:pxa_social_feed/Resources/Private/Language/locallang_db.xlf:tx_pxasocialfeed_domain_model_tokens';
 
     return [
@@ -132,4 +132,4 @@ return (function () {
             ],
         ]
     ];
-})();
+});

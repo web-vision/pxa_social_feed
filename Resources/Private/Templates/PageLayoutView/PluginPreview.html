@@ -3,18 +3,18 @@
     <strong><f:translate key="{ll}plugin_title" /></strong>
     <hr>
 
-    <f:render section="pre" contentAs="content">
-        <b><f:translate key="{ll}loadType" /></b>: {settings.switchableControllerActions}<br>
-        <b><f:translate key="{ll}presentation" /></b>: {settings.presentation}<br>
-        <b><f:translate key="{ll}appearanceFeedItem" /></b>: {settings.partial}<br>
-        <b><f:translate key="{ll}feedsLimit" /></b>: <f:if condition="{settings.feedsLimit}" then="{settings.feedsLimit}" else="{f:translate(key: '{ll}unlimited')}" /><br>
-        <b><f:translate key="{ll}loadLikesCount" /></b>: <f:if condition="{settings.loadLikesCount}" then="{f:translate(key: '{ll}yes')}" else="{f:translate(key: '{ll}no')}" /><br>
+    <pre><f:spaceless>
+        <f:format.raw>
+            <b><f:translate key="{ll}loadType" /></b>: {settings.switchableControllerActions}<br>
+            <b><f:translate key="{ll}presentation" /></b>: {settings.presentation}<br>
+            <b><f:translate key="{ll}appearanceFeedItem" /></b>: {settings.partial}<br>
+            <b><f:translate key="{ll}feedsLimit" /></b>: <f:if condition="{settings.feedsLimit}" then="{settings.feedsLimit}" else="{f:translate(key: '{ll}unlimited')}" /><br>
+            <b><f:translate key="{ll}loadLikesCount" /></b>: <f:if condition="{settings.loadLikesCount}" then="{f:translate(key: '{ll}yes')}" else="{f:translate(key: '{ll}no')}" /><br>
 
-        <f:if condition="{configurations}">
-            <b><f:translate key="{ll}feeds" /></b>: {configurations}
-        </f:if>
-    </f:render>
+            <f:if condition="{configurations}">
+                <b><f:translate key="{ll}feeds" /></b>: {configurations}
+            </f:if>
+        </f:format.raw>
+    </f:spaceless></pre>
 </f:alias>
-
-<f:section name="pre"><pre>{content -> f:format.raw() -> f:spaceless()}</pre></f:section>
 </html>

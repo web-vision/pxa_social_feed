@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
@@ -110,7 +109,7 @@ class AdministrationController extends ActionController
      * @param ViewInterface $view
      * @return void
      */
-    protected function initializeView(ViewInterface $view): void
+    protected function initializeView(ViewInterface $view)
     {
         /** @var BackendTemplateView $view */
         parent::initializeView($view);
@@ -146,7 +145,7 @@ class AdministrationController extends ActionController
      * @param bool $activeTokenTab
      * @return void
      */
-    public function indexAction($activeTokenTab = false): void
+    public function indexAction($activeTokenTab = false)
     {
         $tokens = $this->tokenRepository->findAll();
 
@@ -164,7 +163,7 @@ class AdministrationController extends ActionController
      * @param Token $token
      * @param int $type
      */
-    public function editTokenAction(Token $token = null, int $type = Token::FACEBOOK): void
+    public function editTokenAction(Token $token = null, $type = Token::FACEBOOK)
     {
         $isNew = $token === null;
 
@@ -188,7 +187,7 @@ class AdministrationController extends ActionController
      * @param Token $token
      * @validate $token \Pixelant\PxaSocialFeed\Domain\Validation\Validator\TokenValidator
      */
-    public function updateTokenAction(Token $token): void
+    public function updateTokenAction(Token $token)
     {
         $isNew = $token->getUid() === null;
 
@@ -202,7 +201,7 @@ class AdministrationController extends ActionController
      *
      * @param Token $token
      */
-    public function resetAccessTokenAction(Token $token): void
+    public function resetAccessTokenAction(Token $token)
     {
         $token->setAccessToken('');
         $this->tokenRepository->update($token);
@@ -216,7 +215,7 @@ class AdministrationController extends ActionController
      * @param Token $token
      * @return void
      */
-    public function deleteTokenAction(Token $token): void
+    public function deleteTokenAction(Token $token)
     {
         $tokenConfigurations = $this->configurationRepository->findConfigurationByToken($token);
 
@@ -239,7 +238,7 @@ class AdministrationController extends ActionController
      * @param Configuration $configuration
      * @return void
      */
-    public function editConfigurationAction(Configuration $configuration = null): void
+    public function editConfigurationAction(Configuration $configuration = null)
     {
         $tokens = $this->tokenRepository->findAll();
 
@@ -253,7 +252,7 @@ class AdministrationController extends ActionController
      * @validate $configuration \Pixelant\PxaSocialFeed\Domain\Validation\Validator\ConfigurationValidator
      * @return void
      */
-    public function updateConfigurationAction(Configuration $configuration): void
+    public function updateConfigurationAction(Configuration $configuration)
     {
         $isNew = $configuration->getUid() === null;
 
@@ -281,7 +280,7 @@ class AdministrationController extends ActionController
      * @param Configuration $configuration
      * @return void
      */
-    public function deleteConfigurationAction(Configuration $configuration): void
+    public function deleteConfigurationAction(Configuration $configuration)
     {
         // Remove all feeds
         $feeds = $this->feedRepository->findByConfiguration($configuration);
@@ -302,7 +301,7 @@ class AdministrationController extends ActionController
      * @param array|null $arguments
      * @return string
      */
-    protected function translate(string $key, array $arguments = null): ?string
+    protected function translate($key, $arguments = null)
     {
         $key = 'module.' . $key;
 
@@ -314,7 +313,7 @@ class AdministrationController extends ActionController
      *
      * @return void
      */
-    protected function createMenu(): void
+    protected function createMenu()
     {
         // if view was found
         if ($this->view->getModuleTemplate() !== null) {
@@ -350,7 +349,7 @@ class AdministrationController extends ActionController
      * @param Configuration $configuration
      * @param int $newStorage
      */
-    protected function migrateFeedsToNewStorage(Configuration $configuration, int $newStorage): void
+    protected function migrateFeedsToNewStorage(Configuration $configuration, $newStorage)
     {
         $feedItems = $this->feedRepository->findByConfiguration($configuration);
 
@@ -368,7 +367,7 @@ class AdministrationController extends ActionController
      * @param $tokens
      * @return bool
      */
-    protected function isTokensValid($tokens): bool
+    protected function isTokensValid($tokens)
     {
         /** @var Token $token */
         foreach ($tokens as $token) {
@@ -385,7 +384,7 @@ class AdministrationController extends ActionController
     /**
      * Generate settings for JS
      */
-    protected function getInlineSettings(): string
+    protected function getInlineSettings()
     {
         $uriBuilder = GeneralUtility::makeInstance(BackendUriBuilder::class);
 
@@ -402,10 +401,10 @@ class AdministrationController extends ActionController
      * @param int $severity
      */
     protected function redirectToIndex(
-        bool $activeTokenTab = false,
-        string $message = null,
-        int $severity = FlashMessage::OK
-    ): void {
+        $activeTokenTab = false,
+        $message = null,
+        $severity = FlashMessage::OK
+    ) {
         if (!empty($message)) {
             $this->addFlashMessage(
                 $message,

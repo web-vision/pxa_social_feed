@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Update;
 
@@ -17,17 +16,17 @@ interface FeedUpdaterInterface
      *
      * @param FeedSourceInterface $source
      */
-    public function update(FeedSourceInterface $source): void;
+    public function update(FeedSourceInterface $source);
 
     /**
      * Persist all updates
      */
-    public function persist(): void;
+    public function persist();
 
     /**
      * Clean outdated records after persist
      *
      * @param Configuration $configuration Import configuration
      */
-    public function cleanUp(Configuration $configuration): void;
+    public function cleanUp(Configuration $configuration);
 }

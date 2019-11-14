@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Update;
 
@@ -20,7 +19,7 @@ class TwitterFeedUpdater extends BaseUpdater
      *
      * @param FeedSourceInterface $source
      */
-    public function update(FeedSourceInterface $source): void
+    public function update(FeedSourceInterface $source)
     {
         $items = $source->load();
 
@@ -50,7 +49,7 @@ class TwitterFeedUpdater extends BaseUpdater
      * @param Configuration $configuration
      * @return Feed
      */
-    protected function createFeedItem(array $rawData, Configuration $configuration): Feed
+    protected function createFeedItem(array $rawData, Configuration $configuration)
     {
         $feedItem = $this->objectManager->get(Feed::class);
         $date = new \DateTime($rawData['created_at']);
@@ -74,7 +73,7 @@ class TwitterFeedUpdater extends BaseUpdater
      * @param array $rawData
      * @return void
      */
-    protected function updateFeedItem(Feed $feedItem, array $rawData): void
+    protected function updateFeedItem(Feed $feedItem, array $rawData)
     {
         // Update text
         $text = $rawData['full_text'] ?: $rawData['text'] ?: '';
@@ -83,12 +82,18 @@ class TwitterFeedUpdater extends BaseUpdater
         }
 
         // Media
-        $image = $rawData['entities']['media'][0]['media_url_https'] ?? '';
+        $image = isset($rawData['entities']['media'][0]['media_url_https']) ? $rawData['entities']['media'][0]['media_url_https'] : '';
         if ($feedItem->getImage() != $image) {
             $feedItem->setImage($image);
         }
 
-        $likes = intval($rawData['retweeted_status']['favorite_count'] ?? $rawData['favorite_count'] ?? 0);
+        if (isset($rawData['retweeted_status']['favorite_count'])) {
+            $likes = (int)$rawData['retweeted_status']['favorite_count'];
+        } elseif (isset($rawData['favorite_count'])) {
+            $likes = (int)$rawData['favorite_count'];
+        } else {
+            $likes = 0;
+        }
 
         if ($likes != $feedItem->getLikes()) {
             $feedItem->setLikes($likes);

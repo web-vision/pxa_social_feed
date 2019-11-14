@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Utility;
 
@@ -23,7 +22,7 @@ class LoggerUtility
      * @param string $message
      * @param int $type
      */
-    public static function log(string $message, int $type = self::INFO): void
+    public static function log($message, $type = self::INFO)
     {
         if (!($GLOBALS['BE_USER'] instanceof BackendUserAuthentication)) {
             return;

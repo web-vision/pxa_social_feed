@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Service\Notification;
 
@@ -26,7 +25,7 @@ class NotificationService
      * @param string $receiverEmail
      * @param string $senderEmail
      */
-    public function __construct(string $receiverEmail = '', string $senderEmail = '')
+    public function __construct($receiverEmail = '', $senderEmail = '')
     {
         $this->receiverEmail = $receiverEmail;
         $this->senderEmail = $senderEmail;
@@ -38,7 +37,7 @@ class NotificationService
      * @param string $subject
      * @param string $message
      */
-    public function notify(string $subject, string $message): void
+    public function notify($subject, $message)
     {
         $mailer = $this->getMailer();
 
@@ -53,7 +52,7 @@ class NotificationService
      *
      * @return bool
      */
-    public function canSendEmail(): bool
+    public function canSendEmail()
     {
         return GeneralUtility::validEmail($this->senderEmail) && GeneralUtility::validEmail($this->receiverEmail);
     }
@@ -63,7 +62,7 @@ class NotificationService
      *
      * @return MailMessage
      */
-    protected function getMailer(): MailMessage
+    protected function getMailer()
     {
         $mail = GeneralUtility::makeInstance(MailMessage::class);
 
@@ -77,7 +76,7 @@ class NotificationService
     /**
      * @return string
      */
-    public function getSenderEmail(): string
+    public function getSenderEmail()
     {
         return $this->senderEmail;
     }
@@ -85,7 +84,7 @@ class NotificationService
     /**
      * @param string $senderEmail
      */
-    public function setSenderEmail(string $senderEmail): void
+    public function setSenderEmail($senderEmail)
     {
         $this->senderEmail = $senderEmail;
     }
@@ -93,7 +92,7 @@ class NotificationService
     /**
      * @return string
      */
-    public function getReceiverEmail(): string
+    public function getReceiverEmail()
     {
         return $this->receiverEmail;
     }
@@ -101,7 +100,7 @@ class NotificationService
     /**
      * @param string $receiverEmail
      */
-    public function setReceiverEmail(string $receiverEmail): void
+    public function setReceiverEmail($receiverEmail)
     {
         $this->receiverEmail = $receiverEmail;
     }

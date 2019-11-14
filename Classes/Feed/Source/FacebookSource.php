@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
@@ -14,7 +13,7 @@ class FacebookSource extends BaseFacebookSource
      *
      * @return array Feed items
      */
-    public function load(): array
+    public function load()
     {
         $fb = $this->getConfiguration()->getToken()->getFb();
         $response = $fb->get(
@@ -29,7 +28,7 @@ class FacebookSource extends BaseFacebookSource
      *
      * @return array
      */
-    protected function getEndPointFields(): array
+    protected function getEndPointFields()
     {
         return [
             'likes.summary(true).limit(0)',

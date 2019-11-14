@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Service\Expire;
 
@@ -29,7 +28,7 @@ class FacebookAccessTokenExpireService
      *
      * @return bool
      */
-    public function hasExpired(): bool
+    public function hasExpired()
     {
         return $this->token->isValidFacebookAccessToken() === false;
     }
@@ -41,7 +40,7 @@ class FacebookAccessTokenExpireService
      * @return bool
      * @throws \Exception
      */
-    public function willExpireSoon(int $soonExpireAfterDays): bool
+    public function willExpireSoon($soonExpireAfterDays)
     {
         return $this->expireWhen() <= $soonExpireAfterDays;
     }
@@ -52,7 +51,7 @@ class FacebookAccessTokenExpireService
      * @return int
      * @throws \Exception
      */
-    public function expireWhen(): int
+    public function expireWhen()
     {
         $expireAt = $this->token->getFacebookAccessTokenMetadataExpirationDate();
         if ($expireAt !== null && $expireAt->getTimestamp() >= time()) {
@@ -70,7 +69,7 @@ class FacebookAccessTokenExpireService
      *
      * @return bool
      */
-    public function tokenRequireCheck(): bool
+    public function tokenRequireCheck()
     {
         return $this->token->isFacebookType() || $this->token->isInstagramType();
     }

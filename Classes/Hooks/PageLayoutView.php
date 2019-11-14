@@ -27,10 +27,7 @@ namespace Pixelant\PxaSocialFeed\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -53,11 +50,13 @@ class PageLayoutView
      * @param array $params
      * @return string
      */
-    public function getExtensionInformation($params): string
+    public function getExtensionInformation($params)
     {
         if ($params['row']['list_type'] == 'pxasocialfeed_showfeed') {
             $view = $this->getView();
-            $settings = $this->getFlexFormService()->convertFlexFormContentToArray($params['row']['pi_flexform'] ?? '');
+            $settings = $this->getFlexFormService()->convertFlexFormContentToArray(
+                isset($params['row']['pi_flexform']) ? $params['row']['pi_flexform'] : ''
+            );
 
             if (isset($settings['settings'])) {
                 $settings += $settings['settings'];
@@ -67,23 +66,11 @@ class PageLayoutView
             // configurations info
             $configurations = '';
             if ($settings['configuration']) {
-                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-                    ->getQueryBuilderForTable('tx_pxasocialfeed_domain_model_configuration');
-
-                $configurations = $queryBuilder
-                    ->select('name')
-                    ->from('tx_pxasocialfeed_domain_model_configuration')
-                    ->where(
-                        $queryBuilder->expr()->in(
-                            'uid',
-                            $queryBuilder->createNamedParameter(
-                                GeneralUtility::intExplode(',', $settings['configuration']),
-                                Connection::PARAM_INT_ARRAY
-                            )
-                        )
-                    )
-                    ->execute()
-                    ->fetchAll(\PDO::FETCH_COLUMN);
+                $configurations = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+                    'name',
+                    'tx_pxasocialfeed_domain_model_configuration',
+                    sprintf('uid IN (%s)', implode(',', $settings['configuration']))
+                );
 
                 if (is_array($configurations)) {
                     $configurations = implode(', ', $configurations);
@@ -103,7 +90,7 @@ class PageLayoutView
      *
      * @return StandaloneView
      */
-    protected function getView(): StandaloneView
+    protected function getView()
     {
         $template = GeneralUtility::getFileAbsFileName($this->templatePath);
 
@@ -114,12 +101,10 @@ class PageLayoutView
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Service\FlexFormService|\TYPO3\CMS\Extbase\Service\FlexFormService
+     * @return \TYPO3\CMS\Extbase\Service\FlexFormService
      */
     protected function getFlexFormService()
     {
-        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9004000
-            ? GeneralUtility::makeInstance(\TYPO3\CMS\Core\Service\FlexFormService::class)
-            : GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Service\FlexFormService::class);
+        return GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Service\FlexFormService::class);
     }
 }

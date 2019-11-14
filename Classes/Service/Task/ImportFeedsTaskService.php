@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Service\Task;
 
@@ -59,7 +58,7 @@ class ImportFeedsTaskService
      * @param bool $runAllConfigurations
      * @return bool
      */
-    public function import(array $configurationUids, bool $runAllConfigurations = false): bool
+    public function import(array $configurationUids, $runAllConfigurations = false)
     {
         /** @var Configuration[] $configurations */
         $configurations = $runAllConfigurations
@@ -89,7 +88,7 @@ class ImportFeedsTaskService
                 default:
                     // @codingStandardsIgnoreStart
                     throw new UnsupportedTokenType("Token type '{$configuration->getToken()->getType()}' is not supported", 1562837370194);
-                    // @codingStandardsIgnoreEnd
+                // @codingStandardsIgnoreEnd
             }
 
             if (isset($factory)) {
@@ -106,7 +105,7 @@ class ImportFeedsTaskService
      * @param FeedFactoryInterface $feedFactory
      * @param Configuration $configuration
      */
-    protected function importFeed(FeedFactoryInterface $feedFactory, Configuration $configuration): void
+    protected function importFeed(FeedFactoryInterface $feedFactory, Configuration $configuration)
     {
         $source = $feedFactory->getFeedSource($configuration);
         $updater = $feedFactory->getFeedUpdater();
@@ -127,7 +126,7 @@ class ImportFeedsTaskService
      *
      * @param Token $token
      */
-    protected function checkFacebookAccessToken(Token $token): void
+    protected function checkFacebookAccessToken(Token $token)
     {
         $expireTokenService = GeneralUtility::makeInstance(FacebookAccessTokenExpireService::class, $token);
 

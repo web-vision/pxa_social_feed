@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\ViewHelpers;
 
@@ -31,9 +30,9 @@ namespace Pixelant\PxaSocialFeed\ViewHelpers;
 use Pixelant\PxaSocialFeed\Controller\EidController;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3Fluid\Fluid\Core\Variables\VariableProviderInterface;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\TemplateVariableContainer;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
@@ -98,15 +97,15 @@ class FacebookLoginUrlViewHelper extends AbstractViewHelper
             return $exception->getMessage();
         }
 
-        $variableProvider = $renderingContext->getVariableProvider();
+        $variableProvider = $renderingContext->getTemplateVariableContainer();
 
-        static::removeVariables($variableProvider, $loginUrlAs, $redirectUrlAs);
+        static::removeVariables($variableProvider, [$loginUrlAs, $redirectUrlAs]);
 
         $variableProvider->add($redirectUrlAs, $redirectUrl);
         $variableProvider->add($loginUrlAs, $url);
         $content = $renderChildrenClosure();
 
-        static::removeVariables($variableProvider, $loginUrlAs, $redirectUrlAs);
+        static::removeVariables($variableProvider, [$loginUrlAs, $redirectUrlAs]);
 
         return $content;
     }
@@ -114,10 +113,11 @@ class FacebookLoginUrlViewHelper extends AbstractViewHelper
     /**
      * Clean template variables
      *
-     * @param VariableProviderInterface $variableProvider
-     * @param string ...$vars
+     * @param TemplateVariableContainer $variableProvider
+     * @param array $vars
+     * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception\InvalidVariableException
      */
-    protected static function removeVariables(VariableProviderInterface $variableProvider, string ...$vars): void
+    protected static function removeVariables(TemplateVariableContainer $variableProvider, array $vars)
     {
         foreach ($vars as $var) {
             if ($variableProvider->exists($var)) {
@@ -132,7 +132,7 @@ class FacebookLoginUrlViewHelper extends AbstractViewHelper
      * @param int $tokenUid
      * @return string
      */
-    protected static function buildRedirectUrl(int $tokenUid): string
+    protected static function buildRedirectUrl($tokenUid)
     {
         return sprintf(
             '%s://%s%s?eID=%s&token=%d',

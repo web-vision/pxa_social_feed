@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Update;
 
@@ -20,7 +19,7 @@ class FacebookFeedUpdater extends BaseUpdater
      *
      * @param FeedSourceInterface $source
      */
-    public function update(FeedSourceInterface $source): void
+    public function update(FeedSourceInterface $source)
     {
         $items = $source->load();
 
@@ -44,7 +43,7 @@ class FacebookFeedUpdater extends BaseUpdater
      * @param array $rawData
      * @param Configuration $configuration
      */
-    protected function updateFeedItem(Feed $feedItem, array $rawData, Configuration $configuration): void
+    protected function updateFeedItem(Feed $feedItem, array $rawData, Configuration $configuration)
     {
         $updated = strtotime($rawData['updated_time']);
         $feedUpdated = $feedItem->getUpdateDate() ? $feedItem->getUpdateDate()->getTimestamp() : 0;
@@ -68,7 +67,7 @@ class FacebookFeedUpdater extends BaseUpdater
      * @param Feed $feed
      * @param array $rawData
      */
-    protected function setFacebookData(Feed $feed, array $rawData): void
+    protected function setFacebookData(Feed $feed, array $rawData)
     {
         if (isset($rawData['message'])) {
             $feed->setMessage($this->encodeMessage($rawData['message']));
@@ -91,7 +90,7 @@ class FacebookFeedUpdater extends BaseUpdater
      * @param Configuration $configuration
      * @return object|Feed
      */
-    protected function createFeedItem(array $rawData, Configuration $configuration): Feed
+    protected function createFeedItem(array $rawData, Configuration $configuration)
     {
         $feedItem = $this->objectManager->get(Feed::class);
 

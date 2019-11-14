@@ -1,7 +1,7 @@
 <?php
 defined('TYPO3_MODE') or die();
 
-(function () {
+call_user_func(function () {
     $_EXTKEY = 'pxa_social_feed';
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
@@ -62,4 +62,4 @@ defined('TYPO3_MODE') or die();
     $eID = \Pixelant\PxaSocialFeed\Controller\EidController::IDENTIFIER;
     $GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include'][$eID] =
         \Pixelant\PxaSocialFeed\Controller\EidController::class . '::addFbAccessTokenAction';
-})();
+});

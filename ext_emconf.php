@@ -18,11 +18,17 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '2.1.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.7.0-9.5.99',
+            'typo3' => '7.6.0-7.6.99',
         ],
         'conflicts' => [
         ],
         'suggests' => [
         ],
     ],
+    'autoload' => [
+        'psr-4' => [
+            'Pixelant\\PxaSocialFeed\\' => 'Classes/',
+            'Facebook\\' => 'Resources/Private/Php/facebook/graph-sdk/src/Facebook/'
+        ]
+    ]
 ];

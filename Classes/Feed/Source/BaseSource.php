@@ -1,13 +1,11 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use Pixelant\PxaSocialFeed\Exception\BadResponseException;
 use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Http\HttpRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -36,7 +34,7 @@ abstract class BaseSource implements FeedSourceInterface
      *
      * @return Configuration
      */
-    public function getConfiguration(): Configuration
+    public function getConfiguration()
     {
         return $this->configuration;
     }
@@ -48,7 +46,7 @@ abstract class BaseSource implements FeedSourceInterface
      * @param array $fields
      * @return string
      */
-    protected function addFieldsAsGetParametersToUrl(string $url, array $fields): string
+    protected function addFieldsAsGetParametersToUrl($url, array $fields)
     {
         $url .= empty($fields) ? '' : ('?' . http_build_query($fields));
 
@@ -60,27 +58,33 @@ abstract class BaseSource implements FeedSourceInterface
      *
      * @param string $url
      * @param array $additionalOptions
-     * @return ResponseInterface
+     * @return \HTTP_Request2_Response
      * @throws BadResponseException
      */
-    protected function performApiGetRequest(string $url, array $additionalOptions = []): ResponseInterface
+    protected function performApiGetRequest($url, $additionalOptions = [])
     {
-        /** @var RequestFactory $requestFactory */
-        $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-
-        /** @var ResponseInterface $response */
-        $response = $requestFactory->request(
+        /** @var HttpRequest $httpRequest */
+        $httpRequest = GeneralUtility::makeInstance(
+            HttpRequest::class,
             $url,
-            'GET',
-            $additionalOptions
+            'GET'
         );
 
-        if ($response->getStatusCode() === 200) {
+        if (isset($additionalOptions['headers']) && is_array($additionalOptions['headers'])) {
+            foreach ($additionalOptions['headers'] as $header => $headerValue) {
+                $httpRequest->setHeader([$header => $headerValue]);
+            }
+        }
+
+        /** @var \HTTP_Request2_Response $response */
+        $response = $httpRequest->send();
+
+        if ($response->getStatus() === 200) {
             return $response;
         } else {
             $body = (string)$response->getBody();
             // @codingStandardsIgnoreStart
-            throw new BadResponseException("Api request return status '{$response->getStatusCode()}' while trying to request '$url' with message '$body'", 1562910160643);
+            throw new BadResponseException("Api request return status '{$response->getStatus()}' while trying to request '$url' with message '$body'", 1562910160643);
             // @codingStandardsIgnoreEnd
         }
     }

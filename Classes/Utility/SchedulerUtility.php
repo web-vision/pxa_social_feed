@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Utility;
 
@@ -28,10 +27,6 @@ namespace Pixelant\PxaSocialFeed\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /**
  * @package Pixelant\PxaSocialFeed\Utility
  */
@@ -43,18 +38,18 @@ class SchedulerUtility
      * @param array $selectedConfigurations
      * @return string
      */
-    public static function getAvailableConfigurationsSelectBox(array $selectedConfigurations): string
+    public static function getAvailableConfigurationsSelectBox(array $selectedConfigurations)
     {
         $selector = '<select class="form-control" name="tx_scheduler[pxasocialfeed_configs][]" multiple>';
 
-        $statement = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('tx_pxasocialfeed_domain_model_configuration')
-            ->select(
-                ['uid', 'name'],
-                'tx_pxasocialfeed_domain_model_configuration'
-            );
+        $statement = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            'uid, name',
+            'tx_pxasocialfeed_domain_model_configuration',
+            ''
+        );
 
-        while ($config = $statement->fetch()) {
+
+        while ($config = $statement->fetch_assoc()) {
             $selectedAttribute = '';
             if (is_array($selectedConfigurations) && in_array($config['uid'], $selectedConfigurations)) {
                 $selectedAttribute = ' selected="selected"';
@@ -78,32 +73,21 @@ class SchedulerUtility
      * @param bool $runAllConfigurations
      * @return string
      */
-    public static function getSelectedConfigurationsInfo(array $configurations, bool $runAllConfigurations)
+    public static function getSelectedConfigurationsInfo($configurations, $runAllConfigurations)
     {
         if ($runAllConfigurations) {
             return 'Feeds: All configurations';
         }
 
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable('tx_pxasocialfeed_domain_model_configuration');
-
-        $statement = $queryBuilder
-            ->select('uid', 'name')
-            ->from('tx_pxasocialfeed_domain_model_configuration')
-            ->where(
-                $queryBuilder->expr()->in(
-                    'uid',
-                    $queryBuilder->createNamedParameter(
-                        $configurations,
-                        Connection::PARAM_INT_ARRAY
-                    )
-                )
-            )
-            ->execute();
+        $statement = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            'uid, name',
+            'tx_pxasocialfeed_domain_model_configuration',
+            sprintf('uid IN (%s)', implode(',', $configurations))
+        );
 
         $info = 'Feeds: ';
 
-        while ($config = $statement->fetch()) {
+        while ($config = $statement->fetch_assoc()) {
             $info .= $config['name'] . ' [UID: ' . $config['uid'] . ']; ';
         }
 

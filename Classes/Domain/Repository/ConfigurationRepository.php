@@ -50,7 +50,7 @@ class ConfigurationRepository extends AbstractRepository
      * @param array $configurations
      * @return QueryResultInterface
      */
-    public function findByUids(array $configurations): QueryResultInterface
+    public function findByUids(array $configurations)
     {
         $query = $this->createQuery();
 
@@ -65,7 +65,7 @@ class ConfigurationRepository extends AbstractRepository
      * @param Token $token
      * @return QueryResultInterface
      */
-    public function findConfigurationByToken(Token $token): QueryResultInterface
+    public function findConfigurationByToken(Token $token)
     {
         $query = $this->createQuery();
 

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\SignalSlot;
 
@@ -24,7 +23,7 @@ trait EmitSignalTrait
      * @param array $variables
      * @return array
      */
-    protected function emitSignal(string $name, array $variables): array
+    protected function emitSignal($name, array $variables)
     {
         $class = get_class($this);
         $variables[] = $this;
@@ -39,7 +38,7 @@ trait EmitSignalTrait
     /**
      * @return Dispatcher
      */
-    protected function getSignalSlotDispatcher(): Dispatcher
+    protected function getSignalSlotDispatcher()
     {
         if ($this->signalSlotDispatcher === null) {
             $this->signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);

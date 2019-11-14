@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Update;
 
@@ -50,7 +49,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     /**
      * Persist changes
      */
-    public function persist(): void
+    public function persist()
     {
         $this->objectManager->get(PersistenceManagerInterface::class)->persistAll();
     }
@@ -60,7 +59,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
      *
      * @param Configuration $configuration
      */
-    public function cleanUp(Configuration $configuration): void
+    public function cleanUp(Configuration $configuration)
     {
         $this->feedRepository->removeNotInStorage($this->feeds, $configuration);
     }
@@ -71,7 +70,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
      *
      * @param Feed $feed
      */
-    protected function addOrUpdateFeedItem(Feed $feed): void
+    protected function addOrUpdateFeedItem(Feed $feed)
     {
         $this->feeds->attach($feed);
         $this->feedRepository->{$feed->_isNew() ? 'add' : 'update'}($feed);
@@ -84,7 +83,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
      * @param $message
      * @return string
      */
-    protected function encodeMessage(string $message): string
+    protected function encodeMessage($message)
     {
         return substr(json_encode($message), 1, -1);
     }

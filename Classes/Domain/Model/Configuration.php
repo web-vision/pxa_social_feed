@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Domain\Model;
 
@@ -76,7 +75,7 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -84,7 +83,7 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
-    public function getSocialId(): string
+    public function getSocialId()
     {
         return $this->socialId;
     }
@@ -92,7 +91,7 @@ class Configuration extends AbstractEntity
     /**
      * @param string $socialId
      */
-    public function setSocialId(string $socialId): void
+    public function setSocialId($socialId)
     {
         $this->socialId = $socialId;
     }
@@ -100,7 +99,7 @@ class Configuration extends AbstractEntity
     /**
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName($name)
     {
         $this->name = $name;
     }
@@ -108,7 +107,7 @@ class Configuration extends AbstractEntity
     /**
      * @return int
      */
-    public function getMaxItems(): int
+    public function getMaxItems()
     {
         return $this->maxItems;
     }
@@ -116,15 +115,15 @@ class Configuration extends AbstractEntity
     /**
      * @param int $maxItems
      */
-    public function setMaxItems(?int $maxItems): void
+    public function setMaxItems($maxItems)
     {
-        $this->maxItems = $maxItems ?? 0;
+        $this->maxItems = (int)$maxItems;
     }
 
     /**
      * @return int
      */
-    public function getStorage(): int
+    public function getStorage()
     {
         return $this->storage;
     }
@@ -132,15 +131,15 @@ class Configuration extends AbstractEntity
     /**
      * @param int $storage
      */
-    public function setStorage(?int $storage): void
+    public function setStorage($storage)
     {
-        $this->storage = $storage ?? 0;
+        $this->storage = (int)$storage;
     }
 
     /**
      * @return Token
      */
-    public function getToken(): ?Token
+    public function getToken()
     {
         if ($this->token instanceof LazyLoadingProxy) {
             $this->token->_loadRealInstance();
@@ -151,7 +150,7 @@ class Configuration extends AbstractEntity
     /**
      * @param Token $token
      */
-    public function setToken(Token $token): void
+    public function setToken(Token $token)
     {
         $this->token = $token;
     }

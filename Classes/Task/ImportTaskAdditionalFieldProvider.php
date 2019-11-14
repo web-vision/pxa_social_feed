@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Task;
 
@@ -75,7 +74,7 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
         ];
 
         $additionalFields['pxasocialfeed_configs'] = [
-            'code' => SchedulerUtility::getAvailableConfigurationsSelectBox($taskInfo['pxasocialfeed_configs'] ?? []),
+            'code' => SchedulerUtility::getAvailableConfigurationsSelectBox(isset($taskInfo['pxasocialfeed_configs']) ? $taskInfo['pxasocialfeed_configs'] : []),
             'label' => 'LLL:EXT:pxa_social_feed/Resources/Private/Language/locallang_be.xlf:scheduler.configs',
             'cshKey' => '',
             'cshLabel' => ''
@@ -131,10 +130,10 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
      */
     public function saveAdditionalFields(array $submittedData, AbstractTask $task)
     {
-        $task->setConfigurations($submittedData['pxasocialfeed_configs'] ?? []);
+        $task->setConfigurations(isset($submittedData['pxasocialfeed_configs']) ? $submittedData['pxasocialfeed_configs'] : []);
         $task->setReceiverEmail($submittedData['pxasocialfeed_receiver_email']);
         $task->setSenderEmail($submittedData['pxasocialfeed_sender_email']);
-        $task->setRunAllConfigurations((bool) $submittedData['pxasocialfeed_run_all_configs']);
+        $task->setRunAllConfigurations((bool)$submittedData['pxasocialfeed_run_all_configs']);
     }
 
     /**
@@ -144,7 +143,7 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
      * @param string $value
      * @return string
      */
-    protected function getInputField(string $fieldName, string $value): string
+    protected function getInputField($fieldName, $value)
     {
         return sprintf(
             '<input type="text" class="form-control" name="tx_scheduler[%s]" id="%s" value="%s" size="30">',
@@ -160,7 +159,7 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
      * @param string $email
      * @return bool
      */
-    protected function isValidEmail(string $email): bool
+    protected function isValidEmail($email)
     {
         return empty($email) || GeneralUtility::validEmail($email);
     }

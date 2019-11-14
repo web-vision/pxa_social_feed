@@ -1,7 +1,7 @@
 <?php
 defined('TYPO3_MODE') or die();
 
-(function () {
+call_user_func(function () {
     if (TYPO3_MODE === 'BE') {
         /**
          * Registers a Backend Module
@@ -29,4 +29,5 @@ defined('TYPO3_MODE') or die();
             'tx_pxasocialfeed_domain_model_' . $table
         );
     }
-})();
+});
+

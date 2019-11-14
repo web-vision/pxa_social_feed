@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed;
 
@@ -19,12 +18,12 @@ interface FeedFactoryInterface
      * @param Configuration $configuration
      * @return FeedSourceInterface
      */
-    public function getFeedSource(Configuration $configuration): FeedSourceInterface;
+    public function getFeedSource(Configuration $configuration);
 
     /**
      * Feed updater. Will create/update feed items
      *
      * @return FeedUpdaterInterface
      */
-    public function getFeedUpdater(): FeedUpdaterInterface;
+    public function getFeedUpdater();
 }

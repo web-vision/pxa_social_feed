@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Domain\Model;
 
@@ -119,7 +118,7 @@ class Token extends AbstractEntity
     /**
      * @return int
      */
-    public function getType(): int
+    public function getType()
     {
         return $this->type;
     }
@@ -127,7 +126,7 @@ class Token extends AbstractEntity
     /**
      * @param int $type
      */
-    public function setType(int $type): void
+    public function setType($type)
     {
         $this->type = $type;
     }
@@ -135,7 +134,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getAppId(): string
+    public function getAppId()
     {
         return $this->appId;
     }
@@ -143,7 +142,7 @@ class Token extends AbstractEntity
     /**
      * @param string $appId
      */
-    public function setAppId(string $appId): void
+    public function setAppId($appId)
     {
         $this->appId = $appId;
     }
@@ -151,7 +150,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getAppSecret(): string
+    public function getAppSecret()
     {
         return $this->appSecret;
     }
@@ -159,7 +158,7 @@ class Token extends AbstractEntity
     /**
      * @param string $appSecret
      */
-    public function setAppSecret(string $appSecret): void
+    public function setAppSecret($appSecret)
     {
         $this->appSecret = $appSecret;
     }
@@ -167,7 +166,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getAccessToken(): string
+    public function getAccessToken()
     {
         return $this->accessToken;
     }
@@ -175,7 +174,7 @@ class Token extends AbstractEntity
     /**
      * @param string $accessToken
      */
-    public function setAccessToken(string $accessToken): void
+    public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
     }
@@ -183,7 +182,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getApiKey(): string
+    public function getApiKey()
     {
         return $this->apiKey;
     }
@@ -191,7 +190,7 @@ class Token extends AbstractEntity
     /**
      * @param string $apiKey
      */
-    public function setApiKey(string $apiKey): void
+    public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
     }
@@ -199,7 +198,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getApiSecretKey(): string
+    public function getApiSecretKey()
     {
         return $this->apiSecretKey;
     }
@@ -207,7 +206,7 @@ class Token extends AbstractEntity
     /**
      * @param string $apiSecretKey
      */
-    public function setApiSecretKey(string $apiSecretKey): void
+    public function setApiSecretKey($apiSecretKey)
     {
         $this->apiSecretKey = $apiSecretKey;
     }
@@ -215,7 +214,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getAccessTokenSecret(): string
+    public function getAccessTokenSecret()
     {
         return $this->accessTokenSecret;
     }
@@ -223,7 +222,7 @@ class Token extends AbstractEntity
     /**
      * @param string $accessTokenSecret
      */
-    public function setAccessTokenSecret(string $accessTokenSecret): void
+    public function setAccessTokenSecret($accessTokenSecret)
     {
         $this->accessTokenSecret = $accessTokenSecret;
     }
@@ -233,7 +232,7 @@ class Token extends AbstractEntity
      *
      * @return bool
      */
-    public function isValidFacebookAccessToken(): bool
+    public function isValidFacebookAccessToken()
     {
         if (empty($this->accessToken)) {
             return false;
@@ -256,7 +255,7 @@ class Token extends AbstractEntity
      * @return string
      * @throws \Exception
      */
-    public function getFacebookAccessTokenValidPeriod(string $format = '%R%a'): string
+    public function getFacebookAccessTokenValidPeriod($format = '%R%a')
     {
         $expireAt = $this->getFacebookAccessTokenMetadataExpirationDate();
         if ($expireAt !== null) {
@@ -274,7 +273,7 @@ class Token extends AbstractEntity
      *
      * @return \DateTime|null
      */
-    public function getFacebookAccessTokenMetadataExpirationDate(): ?\DateTime
+    public function getFacebookAccessTokenMetadataExpirationDate()
     {
         $expireAt = $this->getFacebookAccessTokenMetadata()->getExpiresAt();
 
@@ -299,7 +298,7 @@ class Token extends AbstractEntity
      * @param array $permissions
      * @return string
      */
-    public function getFacebookLoginUrl(string $redirectUrl, array $permissions)
+    public function getFacebookLoginUrl($redirectUrl, $permissions)
     {
         // required by SDK login
         session_start();
@@ -316,7 +315,7 @@ class Token extends AbstractEntity
      *
      * @return array
      */
-    public function getFacebookPagesIds(): array
+    public function getFacebookPagesIds()
     {
         try {
             $body = $this->getFb()->get('me/accounts')->getDecodedBody();
@@ -342,9 +341,9 @@ class Token extends AbstractEntity
      * get value for select box
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle()
     {
-        return LocalizationUtility::translate('module.type.' . $this->getType(), 'PxaSocialFeed') ?? '';
+        return LocalizationUtility::translate('module.type.' . $this->getType(), 'PxaSocialFeed') ?: '';
     }
 
     /**
@@ -352,7 +351,7 @@ class Token extends AbstractEntity
      *
      * @return bool
      */
-    public function isFacebookType(): bool
+    public function isFacebookType()
     {
         return $this->type === static::FACEBOOK;
     }
@@ -362,7 +361,7 @@ class Token extends AbstractEntity
      *
      * @return bool
      */
-    public function isInstagramType(): bool
+    public function isInstagramType()
     {
         return $this->type === static::INSTAGRAM;
     }
@@ -372,7 +371,7 @@ class Token extends AbstractEntity
      *
      * @return bool
      */
-    public function isTwitterType(): bool
+    public function isTwitterType()
     {
         return $this->type === static::TWITTER;
     }
@@ -382,7 +381,7 @@ class Token extends AbstractEntity
      *
      * @return bool
      */
-    public function isYoutubeType(): bool
+    public function isYoutubeType()
     {
         return $this->type === static::YOUTUBE;
     }
@@ -392,7 +391,7 @@ class Token extends AbstractEntity
      *
      * @return Facebook
      */
-    public function getFb(): Facebook
+    public function getFb()
     {
         if ($this->fb === null) {
             $this->fb = FacebookGraphSdkFactory::getUsingToken($this);
@@ -406,7 +405,7 @@ class Token extends AbstractEntity
      *
      * @return AccessTokenMetadata
      */
-    protected function getFacebookAccessTokenMetadata(): AccessTokenMetadata
+    protected function getFacebookAccessTokenMetadata()
     {
         $this->initFacebookAccessTokenMetadata();
         return $this->fbTokenMetaData;
@@ -415,7 +414,7 @@ class Token extends AbstractEntity
     /**
      * Load access token metadata
      */
-    protected function initFacebookAccessTokenMetadata(): void
+    protected function initFacebookAccessTokenMetadata()
     {
         if ($this->fbTokenMetaData === null) {
             $fb = $this->getFb();
@@ -428,7 +427,7 @@ class Token extends AbstractEntity
      *
      * @return array
      */
-    public static function getAvailableTokensTypes(): array
+    public static function getAvailableTokensTypes()
     {
         return [
             static::FACEBOOK,

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Task;
 
@@ -103,7 +102,7 @@ class ImportTask extends AbstractTask
      *
      * @return    string    Information to display
      */
-    public function getAdditionalInformation(): string
+    public function getAdditionalInformation()
     {
         return SchedulerUtility::getSelectedConfigurationsInfo(
             $this->getConfigurations(),
@@ -114,7 +113,7 @@ class ImportTask extends AbstractTask
     /**
      * @return array
      */
-    public function getConfigurations(): array
+    public function getConfigurations()
     {
         return $this->configurations;
     }
@@ -122,7 +121,7 @@ class ImportTask extends AbstractTask
     /**
      * @param array $configurations
      */
-    public function setConfigurations(array $configurations)
+    public function setConfigurations($configurations)
     {
         $this->configurations = $configurations;
     }
@@ -130,7 +129,7 @@ class ImportTask extends AbstractTask
     /**
      * @return string
      */
-    public function getReceiverEmail(): string
+    public function getReceiverEmail()
     {
         return $this->receiverEmail;
     }
@@ -138,7 +137,7 @@ class ImportTask extends AbstractTask
     /**
      * @param string $receiverEmail
      */
-    public function setReceiverEmail(string $receiverEmail): void
+    public function setReceiverEmail($receiverEmail)
     {
         $this->receiverEmail = $receiverEmail;
     }
@@ -146,7 +145,7 @@ class ImportTask extends AbstractTask
     /**
      * @return string
      */
-    public function getSenderEmail(): string
+    public function getSenderEmail()
     {
         return $this->senderEmail;
     }
@@ -154,7 +153,7 @@ class ImportTask extends AbstractTask
     /**
      * @param string $senderEmail
      */
-    public function setSenderEmail(string $senderEmail): void
+    public function setSenderEmail($senderEmail)
     {
         $this->senderEmail = $senderEmail;
     }
@@ -162,7 +161,7 @@ class ImportTask extends AbstractTask
     /**
      * @return NotificationService
      */
-    protected function getNotificationService(): NotificationService
+    protected function getNotificationService()
     {
         $sender = $this->senderEmail ?: $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
         return GeneralUtility::makeInstance(NotificationService::class, $this->receiverEmail, $sender);
@@ -171,7 +170,7 @@ class ImportTask extends AbstractTask
     /**
      * @return bool
      */
-    public function isRunAllConfigurations(): bool
+    public function isRunAllConfigurations()
     {
         return $this->runAllConfigurations;
     }
@@ -179,7 +178,7 @@ class ImportTask extends AbstractTask
     /**
      * @param bool $runAllConfigurations
      */
-    public function setRunAllConfigurations(bool $runAllConfigurations): void
+    public function setRunAllConfigurations($runAllConfigurations)
     {
         $this->runAllConfigurations = $runAllConfigurations;
     }

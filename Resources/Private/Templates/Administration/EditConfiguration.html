@@ -75,9 +75,7 @@
                 </f:link.action>
             </f:then>
             <f:else>
-                <f:render partial="Backend/NothingFoundMessage" contentAs="message">
-                    <f:translate key="module.first_create_token"/>
-                </f:render>
+                <f:render partial="Backend/NothingFoundMessage" arguments="{message: '{f:translate(key: \'module.first_create_token\')}'}" />
 
                 <f:link.action class="btn btn-success" action="editToken">
                     <f:translate key="module.add_new"/>

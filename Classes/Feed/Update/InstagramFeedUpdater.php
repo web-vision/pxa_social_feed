@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Update;
 
@@ -19,7 +18,7 @@ class InstagramFeedUpdater extends BaseUpdater
      *
      * @param FeedSourceInterface $source
      */
-    public function update(FeedSourceInterface $source): void
+    public function update(FeedSourceInterface $source)
     {
         $items = $source->load();
 
@@ -53,7 +52,7 @@ class InstagramFeedUpdater extends BaseUpdater
      * @param array $data
      * @return void
      */
-    public function populateGraphInstagramFeed(Feed $feedItem, array $data): void
+    public function populateGraphInstagramFeed(Feed $feedItem, array $data)
     {
         $isVideo = strtolower($data['media_type']) === 'video';
 
@@ -93,7 +92,7 @@ class InstagramFeedUpdater extends BaseUpdater
      * @param Configuration $configuration
      * @return Feed
      */
-    protected function createFeedItem(Configuration $configuration): Feed
+    protected function createFeedItem(Configuration $configuration)
     {
         /** @var Feed $feedItem */
         $feedItem = $this->objectManager->get(Feed::class);

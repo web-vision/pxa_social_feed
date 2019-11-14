@@ -75,7 +75,7 @@ class FeedRepository extends Repository
      * @param ObjectStorage $storage
      * @param Configuration $configuration
      */
-    public function removeNotInStorage(ObjectStorage $storage, Configuration $configuration): void
+    public function removeNotInStorage(ObjectStorage $storage, Configuration $configuration)
     {
         $query = $this->createQuery();
 
@@ -98,7 +98,7 @@ class FeedRepository extends Repository
      * @param int $limit
      * @return QueryResult
      */
-    public function findByConfigurations(array $configurations, int $limit = 0)
+    public function findByConfigurations(array $configurations, $limit = 0)
     {
         $query = $this->createQuery();
 
@@ -125,7 +125,7 @@ class FeedRepository extends Repository
      * @param int $pid
      * @return Feed|object
      */
-    public function findOneByExternalIdentifier(string $externalIdentifier, int $pid): ?Feed
+    public function findOneByExternalIdentifier($externalIdentifier, $pid)
     {
         $query = $this->createQuery();
 

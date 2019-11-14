@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
@@ -21,7 +20,7 @@ class YoutubeSource extends BaseSource
      *
      * @return array Feed items
      */
-    public function load(): array
+    public function load()
     {
         $fields = $this->getFields($this->getConfiguration());
 
@@ -48,10 +47,10 @@ class YoutubeSource extends BaseSource
      * Request youtube api
      *
      * @param string $url
-     * @return ResponseInterface
+     * @return \HTTP_Request2_Response
      * @throws BadResponseException
      */
-    protected function requestYoutubeApi(string $url): ResponseInterface
+    protected function requestYoutubeApi($url)
     {
         return $this->performApiGetRequest($url);
     }
@@ -62,7 +61,7 @@ class YoutubeSource extends BaseSource
      * @param string $endPoint
      * @return string
      */
-    protected function generateEndPointUrl(string $endPoint): string
+    protected function generateEndPointUrl($endPoint)
     {
         return $this->getUrl() . $endPoint;
     }
@@ -72,7 +71,7 @@ class YoutubeSource extends BaseSource
      *
      * @return string
      */
-    protected function getUrl(): string
+    protected function getUrl()
     {
         return self::API_URL;
     }
@@ -83,7 +82,7 @@ class YoutubeSource extends BaseSource
      * @param Configuration $configuration
      * @return array
      */
-    protected function getFields(Configuration $configuration): array
+    protected function getFields(Configuration $configuration)
     {
         $fields = [
             'order' => 'date',

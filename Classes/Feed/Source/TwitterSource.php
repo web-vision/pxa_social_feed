@@ -1,11 +1,9 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
 use Pixelant\PxaSocialFeed\Exception\BadResponseException;
 use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class TwitterSource
@@ -23,7 +21,7 @@ class TwitterSource extends BaseSource
      *
      * @return array Feed items
      */
-    public function load(): array
+    public function load()
     {
         $endPointUrl = $this->generateEndPointUrl('statuses/user_timeline.json');
         $fields = $this->getFields();
@@ -52,10 +50,10 @@ class TwitterSource extends BaseSource
      *
      * @param string $url
      * @param string $autHeader
-     * @return ResponseInterface
+     * @return \HTTP_Request2_Response
      * @throws BadResponseException
      */
-    protected function requestTwitterApi(string $url, string $autHeader): ResponseInterface
+    protected function requestTwitterApi($url, $autHeader)
     {
         $additionalOptions = [
             'headers' => [
@@ -72,7 +70,7 @@ class TwitterSource extends BaseSource
      * @param string $endPoint
      * @return string
      */
-    protected function generateEndPointUrl(string $endPoint)
+    protected function generateEndPointUrl($endPoint)
     {
         return $this->getApiUrl() . $endPoint;
     }
@@ -82,7 +80,7 @@ class TwitterSource extends BaseSource
      *
      * @return string
      */
-    protected function getApiUrl(): string
+    protected function getApiUrl()
     {
         return self::API_URL;
     }
@@ -92,7 +90,7 @@ class TwitterSource extends BaseSource
      *
      * @return array
      */
-    protected function getFields(): array
+    protected function getFields()
     {
         $configuration = $this->getConfiguration();
 
@@ -117,7 +115,7 @@ class TwitterSource extends BaseSource
      * @param array $fields
      * @return string
      */
-    protected function getAuthHeader(string $url, array $fields): string
+    protected function getAuthHeader($url, $fields)
     {
         $token = $this->getConfiguration()->getToken();
         $oauth = [
@@ -153,7 +151,7 @@ class TwitterSource extends BaseSource
      * @param string $url
      * @return string Built base string
      */
-    protected function buildSigBase(array $oauth, string $url)
+    protected function buildSigBase($oauth, $url)
     {
         ksort($oauth);
         $urlParts = [];

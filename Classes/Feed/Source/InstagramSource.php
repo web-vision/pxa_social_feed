@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
@@ -16,7 +15,7 @@ class InstagramSource extends BaseFacebookSource
      *
      * @return array Feed items
      */
-    public function load(): array
+    public function load()
     {
         $fb = $this->getConfiguration()->getToken()->getFb();
 
@@ -34,7 +33,7 @@ class InstagramSource extends BaseFacebookSource
      * @return string
      * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    protected function getInstagramId(Facebook $fb): string
+    protected function getInstagramId(Facebook $fb)
     {
         $pageId = $this->getConfiguration()->getSocialId();
 
@@ -55,7 +54,7 @@ class InstagramSource extends BaseFacebookSource
      *
      * @return array
      */
-    protected function getEndPointFields(): array
+    protected function getEndPointFields()
     {
         return [
             'caption',

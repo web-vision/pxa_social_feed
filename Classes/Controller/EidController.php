@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
@@ -28,7 +27,7 @@ class EidController
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
-    public function addFbAccessTokenAction(ServerRequestInterface $request): ResponseInterface
+    public function addFbAccessTokenAction(ServerRequestInterface $request)
     {
         /** @var Response $response */
         $response = GeneralUtility::makeInstance(Response::class);
@@ -47,12 +46,14 @@ class EidController
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    protected function processRequest(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    protected function processRequest(ServerRequestInterface $request, ResponseInterface $response)
     {
         session_start();
 
         $tokenUid = (int)$request->getQueryParams()['token'];
-        list('app_id' => $appId, 'app_secret' => $appSecret) = $this->getTokenAppIdAndSecret($tokenUid);
+        $token = $this->getTokenAppIdAndSecret($tokenUid);
+        $appId = $token['app_id'];
+        $appSecret = $token['app_secret'];
 
         if ($appId && $appSecret) {
             try {
@@ -87,9 +88,9 @@ class EidController
     protected function getAndPersistLongLivedAccessToken(
         Facebook $fb,
         AccessToken $accessToken,
-        int $tokenUid,
+        $tokenUid,
         ResponseInterface $response
-    ): void {
+    ) {
         $content = [];
         // Logged in
         $content[] = '<h3>Access Token</h3>';
@@ -148,7 +149,7 @@ class EidController
      * @param int $tokenUid
      * @return array
      */
-    protected function getTokenAppIdAndSecret(int $tokenUid): array
+    protected function getTokenAppIdAndSecret($tokenUid)
     {
         $row = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('tx_pxasocialfeed_domain_model_token')
@@ -175,7 +176,7 @@ class EidController
      * @return AccessToken
      * @throws FacebookObtainAccessTokenException
      */
-    protected function obtainAccessToken(Facebook $fb): AccessToken
+    protected function obtainAccessToken(Facebook $fb)
     {
         $helper = $fb->getRedirectLoginHelper();
 

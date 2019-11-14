@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed;
 
@@ -23,7 +22,7 @@ class YoutubeFactory implements FeedFactoryInterface
      * @param Configuration $configuration
      * @return FeedSourceInterface
      */
-    public function getFeedSource(Configuration $configuration): FeedSourceInterface
+    public function getFeedSource(Configuration $configuration)
     {
         return GeneralUtility::makeInstance(YoutubeSource::class, $configuration);
     }
@@ -33,7 +32,7 @@ class YoutubeFactory implements FeedFactoryInterface
      *
      * @return FeedUpdaterInterface
      */
-    public function getFeedUpdater(): FeedUpdaterInterface
+    public function getFeedUpdater()
     {
         return GeneralUtility::makeInstance(YoutubeFeedUpdater::class);
     }

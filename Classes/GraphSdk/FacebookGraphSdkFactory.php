@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\GraphSdk;
 
@@ -27,7 +26,7 @@ class FacebookGraphSdkFactory
      * @param string|null $version
      * @return Facebook
      */
-    public static function getUsingToken(Token $token, string $version = null): Facebook
+    public static function getUsingToken(Token $token, $version = null)
     {
         $fb = static::getUsingAppIdAndSecret(
             $token->getAppId(),
@@ -48,15 +47,15 @@ class FacebookGraphSdkFactory
      * @return Facebook
      */
     public static function getUsingAppIdAndSecret(
-        string $appId,
-        string $appSecret,
-        string $accessToken = null,
-        string $version = null
-    ): Facebook {
+        $appId,
+        $appSecret,
+        $accessToken = null,
+        $version = null
+    ) {
         $arguments = [
             'app_id' => $appId,
             'app_secret' => $appSecret,
-            'default_graph_version' => $version ?? static::$version,
+            'default_graph_version' => $version ?: static::$version,
         ];
         if (!empty($accessToken)) {
             $arguments['default_access_token'] = $accessToken;

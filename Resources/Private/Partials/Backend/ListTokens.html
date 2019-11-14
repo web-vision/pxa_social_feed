@@ -32,9 +32,7 @@
                 </table>
             </f:then>
             <f:else>
-                <f:render partial="Backend/NothingFoundMessage" contentAs="message">
-                    <f:translate key="module.nothing_were_found"/>
-                </f:render>
+                <f:render partial="Backend/NothingFoundMessage" arguments="{message: '{f:translate(key: \'module.nothing_were_found\')}'}" />
             </f:else>
         </f:if>
     </f:section>

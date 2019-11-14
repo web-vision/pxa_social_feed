@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 
 namespace Pixelant\PxaSocialFeed\Feed;
 
@@ -24,7 +22,7 @@ class InstagramFactory implements FeedFactoryInterface
      * @param Configuration $configuration
      * @return FeedSourceInterface
      */
-    public function getFeedSource(Configuration $configuration): FeedSourceInterface
+    public function getFeedSource(Configuration $configuration)
     {
         return GeneralUtility::makeInstance(InstagramSource::class, $configuration);
     }
@@ -34,7 +32,7 @@ class InstagramFactory implements FeedFactoryInterface
      *
      * @return FeedUpdaterInterface
      */
-    public function getFeedUpdater(): FeedUpdaterInterface
+    public function getFeedUpdater()
     {
         return GeneralUtility::makeInstance(InstagramFeedUpdater::class);
     }

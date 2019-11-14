@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
@@ -19,7 +18,7 @@ abstract class BaseFacebookSource extends BaseSource
      * @param string $endPointEntry
      * @return string
      */
-    protected function generateEndPoint(string $id, string $endPointEntry): string
+    protected function generateEndPoint($id, $endPointEntry)
     {
         $limit = $this->getConfiguration()->getMaxItems();
 
@@ -46,7 +45,7 @@ abstract class BaseFacebookSource extends BaseSource
      * @param FacebookResponse $response
      * @return array
      */
-    protected function getDataFromResponse(FacebookResponse $response): array
+    protected function getDataFromResponse(FacebookResponse $response)
     {
         $body = $response->getDecodedBody();
 
@@ -64,5 +63,5 @@ abstract class BaseFacebookSource extends BaseSource
      *
      * @return array
      */
-    abstract protected function getEndPointFields(): array;
+    abstract protected function getEndPointFields();
 }

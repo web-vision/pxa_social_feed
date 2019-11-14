@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
@@ -16,12 +15,12 @@ interface FeedSourceInterface
      *
      * @return array Feed items
      */
-    public function load(): array;
+    public function load();
 
     /**
      * Return source configuration
 
      * @return Configuration
      */
-    public function getConfiguration(): Configuration;
+    public function getConfiguration();
 }

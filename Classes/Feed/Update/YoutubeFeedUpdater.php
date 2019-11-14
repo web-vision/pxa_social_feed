@@ -19,7 +19,7 @@ class YoutubeFeedUpdater extends BaseUpdater
      *
      * @param FeedSourceInterface $source
      */
-    public function update(FeedSourceInterface $source): void
+    public function update(FeedSourceInterface $source)
     {
         $items = $source->load();
 
@@ -48,19 +48,19 @@ class YoutubeFeedUpdater extends BaseUpdater
      * @param Feed $feedItem
      * @param array $rawData
      */
-    protected function updateFeedItem(Feed $feedItem, array $rawData): void
+    protected function updateFeedItem(Feed $feedItem, array $rawData)
     {
-        $description = $rawData['snippet']['description'] ?? '';
+        $description = isset($rawData['snippet']['description']) ? $rawData['snippet']['description'] : '';
         if ($description != $feedItem->getMessage()) {
             $feedItem->setMessage($this->encodeMessage($description));
         }
 
-        $image = $rawData['snippet']['thumbnails']['high']['url'] ?? '';
+        $image = isset($rawData['snippet']['thumbnails']['high']['url']) ? $rawData['snippet']['thumbnails']['high']['url'] : '';
         if ($image != $feedItem->getImage()) {
             $feedItem->setImage($image);
         }
 
-        $title = $rawData['snippet']['title'] ?? '';
+        $title = $rawData['snippet']['title'] ? $rawData['snippet']['title'] : '';
         if ($this != $feedItem->getTitle()) {
             $feedItem->setTitle($title);
         }
@@ -73,7 +73,7 @@ class YoutubeFeedUpdater extends BaseUpdater
      * @param Configuration $configuration
      * @return Feed
      */
-    protected function createFeedItem(array $rawData, Configuration $configuration): Feed
+    protected function createFeedItem(array $rawData, Configuration $configuration)
     {
         $feedItem = $this->objectManager->get(Feed::class);
 
