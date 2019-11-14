@@ -48,19 +48,20 @@ class SchedulerUtility
             ''
         );
 
+        if ($statement !== false) {
+            while ($config = $statement->fetch_assoc()) {
+                $selectedAttribute = '';
+                if (is_array($selectedConfigurations) && in_array($config['uid'], $selectedConfigurations)) {
+                    $selectedAttribute = ' selected="selected"';
+                }
 
-        while ($config = $statement->fetch_assoc()) {
-            $selectedAttribute = '';
-            if (is_array($selectedConfigurations) && in_array($config['uid'], $selectedConfigurations)) {
-                $selectedAttribute = ' selected="selected"';
+                $selector .= sprintf(
+                    '<option value="%d"%s>%s</option>',
+                    $config['uid'],
+                    $selectedAttribute,
+                    $config['name']
+                );
             }
-
-            $selector .= sprintf(
-                '<option value="%d"%s>%s</option>',
-                $config['uid'],
-                $selectedAttribute,
-                $config['name']
-            );
         }
 
         $selector .= '</select>';
@@ -79,13 +80,21 @@ class SchedulerUtility
             return 'Feeds: All configurations';
         }
 
-        $statement = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'uid, name',
-            'tx_pxasocialfeed_domain_model_configuration',
-            sprintf('uid IN (%s)', implode(',', $configurations))
-        );
+        if (!empty($configurations)) {
+            $statement = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+                'uid, name',
+                'tx_pxasocialfeed_domain_model_configuration',
+                sprintf('uid IN (%s)', implode(',', $configurations))
+            );
+        } else {
+            $statement = false;
+        }
+
 
         $info = 'Feeds: ';
+        if ($statement === false) {
+            return $info;
+        }
 
         while ($config = $statement->fetch_assoc()) {
             $info .= $config['name'] . ' [UID: ' . $config['uid'] . ']; ';
