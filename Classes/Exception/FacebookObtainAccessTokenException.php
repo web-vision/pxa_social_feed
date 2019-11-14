@@ -16,7 +16,7 @@ class FacebookObtainAccessTokenException extends \Exception
     /**
      * @return int
      */
-    public function getStatusCode(): int
+    public function getStatusCode()
     {
         return $this->statusCode;
     }
@@ -24,7 +24,7 @@ class FacebookObtainAccessTokenException extends \Exception
     /**
      * @param int $statusCode
      */
-    public function setStatusCode(int $statusCode): void
+    public function setStatusCode($statusCode)
     {
         $this->statusCode = $statusCode;
     }

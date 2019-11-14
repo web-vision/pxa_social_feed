@@ -163,7 +163,7 @@ class Feed extends AbstractEntity
     /**
      * @param string $postUrl
      */
-    public function setPostUrl(string $postUrl)
+    public function setPostUrl($postUrl)
     {
         $this->postUrl = $postUrl;
     }
