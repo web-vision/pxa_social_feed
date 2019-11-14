@@ -9,7 +9,6 @@ use Pixelant\PxaSocialFeed\Exception\FacebookObtainAccessTokenException;
 use Pixelant\PxaSocialFeed\GraphSdk\FacebookGraphSdkFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -126,14 +125,13 @@ class EidController
             $content[] = "<p>Value: {$accessToken->getValue()}</p>";
         }
 
-        GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('tx_pxasocialfeed_domain_model_token')
-            ->update(
-                'tx_pxasocialfeed_domain_model_token',
-                ['access_token' => (string)$accessToken],
-                ['uid' => $tokenUid],
-                [\PDO::PARAM_STR]
-            );
+        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+            'tx_pxasocialfeed_domain_model_token',
+            'uid=' . $tokenUid,
+            [
+                'access_token' => (string)$accessToken
+            ]
+        );
 
         $content[] = '<p>Token was updated. <b>You can close this window</b>.</p>';
 
@@ -151,16 +149,11 @@ class EidController
      */
     protected function getTokenAppIdAndSecret($tokenUid)
     {
-        $row = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('tx_pxasocialfeed_domain_model_token')
-            ->select(
-                ['app_id', 'app_secret'],
-                'tx_pxasocialfeed_domain_model_token',
-                [
-                    'uid' => $tokenUid
-                ]
-            )
-            ->fetch();
+        $row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+            'app_id, app_secret',
+            'tx_pxasocialfeed_domain_model_token',
+            'uid=' . $tokenUid
+        );
 
         if (is_array($row)) {
             return $row;
