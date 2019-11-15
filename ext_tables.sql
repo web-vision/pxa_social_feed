@@ -1,8 +1,7 @@
 #
 # Table structure for table 'tx_pxasocialfeed_domain_model_feed'
 #
-CREATE TABLE tx_pxasocialfeed_domain_model_feed
-(
+CREATE TABLE tx_pxasocialfeed_domain_model_feed (
 
     uid                 int(11)                         NOT NULL auto_increment,
     pid                 int(11)             DEFAULT '0' NOT NULL,
@@ -33,8 +32,7 @@ CREATE TABLE tx_pxasocialfeed_domain_model_feed
 #
 # Table structure for table 'tx_pxasocialfeed_domain_model_token'
 #
-CREATE TABLE tx_pxasocialfeed_domain_model_token
-(
+CREATE TABLE tx_pxasocialfeed_domain_model_token (
 
     uid                 int(11)                         NOT NULL auto_increment,
     pid                 int(11)             DEFAULT '0' NOT NULL,
@@ -65,8 +63,7 @@ CREATE TABLE tx_pxasocialfeed_domain_model_token
 #
 # Table structure for table 'tx_pxasocialfeed_domain_model_config'
 #
-CREATE TABLE tx_pxasocialfeed_domain_model_configuration
-(
+CREATE TABLE tx_pxasocialfeed_domain_model_configuration (
 
     uid       int(11)                         NOT NULL auto_increment,
     pid       int(11)             DEFAULT '0' NOT NULL,
