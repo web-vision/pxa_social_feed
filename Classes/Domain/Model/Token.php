@@ -123,7 +123,7 @@ class Token extends AbstractEntity
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -131,7 +131,7 @@ class Token extends AbstractEntity
     /**
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName($name)
     {
         $this->name = $name;
     }
