@@ -193,7 +193,7 @@ class AdministrationController extends ActionController
 
         $this->tokenRepository->{$isNew ? 'add' : 'update'}($token);
 
-        $this->redirectToIndex(true, $this->translate('action_changes_saved'));
+        $this->redirectToIndexTokenTab($this->translate('action_changes_saved'));
     }
 
     /**
@@ -206,7 +206,7 @@ class AdministrationController extends ActionController
         $token->setAccessToken('');
         $this->tokenRepository->update($token);
 
-        $this->redirectToIndex(true);
+        $this->redirectToIndexTokenTab();
     }
 
     /**
@@ -222,11 +222,10 @@ class AdministrationController extends ActionController
         if ($tokenConfigurations->count() === 0) {
             $this->tokenRepository->remove($token);
 
-            $this->redirectToIndex(true, $this->translate('action_delete'));
+            $this->redirectToIndexTokenTab($this->translate('action_delete'));
         }
 
-        $this->redirectToIndex(
-            true,
+        $this->redirectToIndexTokenTab(
             $this->translate('error_token_configuration_exist', [$tokenConfigurations->getFirst()->getName()]),
             FlashMessage::ERROR
         );
@@ -271,7 +270,7 @@ class AdministrationController extends ActionController
             $this->redirect('editConfiguration', null, null, ['configuration' => $configuration]);
         }
 
-        $this->redirectToIndex(false, $this->translate('action_changes_saved'));
+        $this->redirectToIndex($this->translate('action_changes_saved'));
     }
 
     /**
@@ -291,7 +290,7 @@ class AdministrationController extends ActionController
 
         $this->configurationRepository->remove($configuration);
 
-        $this->redirectToIndex(false, $this->translate('action_delete'));
+        $this->redirectToIndex($this->translate('action_delete'));
     }
 
     /**
@@ -394,14 +393,31 @@ class AdministrationController extends ActionController
     }
 
     /**
+     * Shortcut to redirect to index on tokens tab with flash message
+     *
+     * @param string|null $message
+     * @param int $severity
+     */
+    protected function redirectToIndexTokenTab($message = null, $severity = FlashMessage::OK)
+    {
+        if (!empty($message)) {
+            $this->addFlashMessage(
+                $message,
+                '',
+                $severity
+            );
+        }
+
+        $this->redirect('index', null, null, ['activeTokenTab' => true]);
+    }
+
+    /**
      * Shortcut to redirect to index with flash message
      *
-     * @param bool $activeTokenTab
-     * @param string $message
+     * @param string|null $message
      * @param int $severity
      */
     protected function redirectToIndex(
-        $activeTokenTab = false,
         $message = null,
         $severity = FlashMessage::OK
     ) {
@@ -413,6 +429,6 @@ class AdministrationController extends ActionController
             );
         }
 
-        $this->redirect('index', null, null, ['activeTokenTab' => $activeTokenTab]);
+        $this->redirect('index');
     }
 }
