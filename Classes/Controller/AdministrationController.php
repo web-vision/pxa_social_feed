@@ -5,11 +5,13 @@ namespace Pixelant\PxaSocialFeed\Controller;
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use Pixelant\PxaSocialFeed\Domain\Model\Feed;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
+use Pixelant\PxaSocialFeed\Domain\Repository\BackendUserGroupRepository;
 use Pixelant\PxaSocialFeed\Domain\Repository\ConfigurationRepository;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
 use Pixelant\PxaSocialFeed\Domain\Repository\TokenRepository;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -66,6 +68,11 @@ class AdministrationController extends ActionController
     protected $feedRepository = null;
 
     /**
+     * @var BackendUserGroupRepository
+     */
+    protected $backendUserGroupRepository = null;
+
+    /**
      * BackendTemplateContainer
      *
      * @var BackendTemplateView
@@ -78,6 +85,15 @@ class AdministrationController extends ActionController
      * @var BackendTemplateView
      */
     protected $defaultViewObjectName = BackendTemplateView::class;
+
+    /**
+     * @param BackendUserGroupRepository $backendUserGroupRepository
+     */
+    public function __construct(BackendUserGroupRepository $backendUserGroupRepository)
+    {
+        parent::__construct();
+        $this->backendUserGroupRepository = $backendUserGroupRepository;
+    }
 
     /**
      * @param ConfigurationRepository $configurationRepository
@@ -179,6 +195,7 @@ class AdministrationController extends ActionController
         }
 
         $this->view->assignMultiple(compact('token', 'type', 'isNew', 'availableTypes'));
+        $this->assignBEGroups();
     }
 
     /**
@@ -242,6 +259,7 @@ class AdministrationController extends ActionController
         $tokens = $this->tokenRepository->findAll();
 
         $this->view->assignMultiple(compact('configuration', 'tokens'));
+        $this->assignBEGroups();
     }
 
     /**
@@ -291,6 +309,21 @@ class AdministrationController extends ActionController
         $this->configurationRepository->remove($configuration);
 
         $this->redirectToIndex($this->translate('action_delete'));
+    }
+
+    /**
+     * Assign BE groups to template
+     * If admin all are available
+     */
+    protected function assignBEGroups()
+    {
+        /** @var BackendUserAuthentication $beUser */
+        $beUser = $GLOBALS['BE_USER'];
+        $groups = $beUser->isAdmin()
+            ? $this->backendUserGroupRepository->findAll()
+            : $beUser->userGroups;
+
+        $this->view->assign('beGroups', $groups);
     }
 
     /**
