@@ -39,6 +39,7 @@ CREATE TABLE tx_pxasocialfeed_domain_model_token (
 
     name                varchar(55)         DEFAULT ''  NOT NULL,
     type                int(11)             DEFAULT '1' NOT NULL,
+    be_group            varchar(255)        DEFAULT '0' NOT NULL,
 
     # Facebok & Instagram
     app_id              varchar(55)         DEFAULT ''  NOT NULL,
@@ -74,6 +75,7 @@ CREATE TABLE tx_pxasocialfeed_domain_model_configuration (
     token     int(11) unsigned    DEFAULT '0',
     max_items int(11) unsigned    DEFAULT '0',
     storage   int(11)             DEFAULT '0' NOT NULL,
+    be_group  varchar(255)        DEFAULT '0' NOT NULL,
 
     tstamp    int(11) unsigned    DEFAULT '0' NOT NULL,
     crdate    int(11) unsigned    DEFAULT '0' NOT NULL,
