@@ -29,7 +29,7 @@
                                 <f:if condition="{configuration}">
                                     <f:then>
                                         <f:alias map="{token: configuration.token}">
-                                            <f:if condition="{token.facebookType} || {token.instagramType}">
+                                            <f:if condition="{token.facebookOrInstagramType}">
                                                 <f:then>
                                                     <f:form.select property="socialId" options="{token.facebookPagesIds}" class="form-control" />
                                                 </f:then>
