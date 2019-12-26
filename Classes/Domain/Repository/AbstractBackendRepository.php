@@ -67,6 +67,8 @@ abstract class AbstractBackendRepository extends Repository
         $queryParser = $this->objectManager->get(Typo3DbQueryParser::class);
 
         $statementParts = $queryParser->parseQuery($query);
+        $queryParser->addDynamicQueryParts($query->getQuerySettings(), $statementParts);
+
         $tableName = array_values($statementParts['tables'])[0];
         $beGroupRestriction = (string)GeneralUtility::makeInstance(BackendGroupRestriction::class, $tableName);
 
