@@ -266,7 +266,7 @@ class Token extends AbstractEntity
     /**
      * @return ObjectStorage
      */
-    public function getBeGroup(): ObjectStorage
+    public function getBeGroup()
     {
         return $this->beGroup;
     }
@@ -274,7 +274,7 @@ class Token extends AbstractEntity
     /**
      * @param ObjectStorage $beGroup
      */
-    public function setBeGroup(ObjectStorage $beGroup): void
+    public function setBeGroup(ObjectStorage $beGroup)
     {
         $this->beGroup = $beGroup;
     }

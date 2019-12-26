@@ -1,18 +1,14 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Database\Query\Restriction;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Database\Query\Expression\CompositeExpression;
-use TYPO3\CMS\Core\Database\Query\Expression\ExpressionBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\QueryRestrictionInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Restrict access by BE user group
  */
-class BackendGroupRestriction implements QueryRestrictionInterface
+class BackendGroupRestriction
 {
     /**
      * @var string
@@ -25,41 +21,59 @@ class BackendGroupRestriction implements QueryRestrictionInterface
     protected $backendUserAuth = null;
 
     /**
-     * Initialize
+     * @var string
      */
-    public function __construct()
+    protected $where = '';
+
+    /**
+     * Initialize
+     *
+     * @param $tableName
+     */
+    public function __construct($tableName)
     {
         if (isset($GLOBALS['BE_USER'])) {
             $this->backendUserAuth = $GLOBALS['BE_USER'];
         }
+
+        $this->where = $this->buildAdditionalWhere($tableName);
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
-    public function buildExpression(array $queriedTables, ExpressionBuilder $expressionBuilder): CompositeExpression
+    public function __toString()
+    {
+        return $this->where;
+    }
+
+    /**
+     * Build BE groups restriction
+     *
+     * @param string $tableName
+     * @return string Additional where clause
+     */
+    protected function buildAdditionalWhere($tableName)
     {
         $constraints = [];
         if ($this->backendUserAuth !== null && !$this->backendUserAuth->isAdmin()) {
-            foreach ($queriedTables as $tableAlias => $tableName) {
-                $fieldName = $tableAlias . '.' . $this->groupFieldName;
-                // Allow records where no group access has been configured (field values NULL, 0 or empty string)
-                $constraints = [
-                    $expressionBuilder->isNull($fieldName),
-                    $expressionBuilder->eq($fieldName, $expressionBuilder->literal('')),
-                    $expressionBuilder->eq($fieldName, $expressionBuilder->literal('0')),
-                ];
+            $fieldName = $tableName . '.' . $this->groupFieldName;
+            // Allow records where no group access has been configured (field values NULL, 0 or empty string)
+            $constraints = [
+                "$fieldName is NULL",
+                "$fieldName = ''",
+                "$fieldName = '0'",
+            ];
 
-                $backendGroupIds = GeneralUtility::intExplode(',', $this->backendUserAuth->groupList);
-                foreach ($backendGroupIds as $backendGroupId) {
-                    $constraints[] = $expressionBuilder->inSet(
-                        $fieldName,
-                        $expressionBuilder->literal((string)$backendGroupId)
-                    );
-                }
+            $backendGroupIds = GeneralUtility::intExplode(',', $this->backendUserAuth->groupList);
+            foreach ($backendGroupIds as $backendGroupId) {
+                $constraints[] = "FIND_IN_SET($backendGroupId, $fieldName)";
             }
         }
+        if (!empty($constraints)) {
+            return sprintf('(%s)', implode(' OR ', $constraints));
+        }
 
-        return $expressionBuilder->orX(...$constraints);
+        return '';
     }
 }

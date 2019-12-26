@@ -66,11 +66,36 @@ abstract class AbstractBackendRepository extends Repository
         $query = $this->createQuery();
         $queryParser = $this->objectManager->get(Typo3DbQueryParser::class);
 
-        $queryBuilder = $queryParser->convertQueryToDoctrineQueryBuilder($query);
-        $queryBuilder
-            ->getRestrictions()
-            ->add(GeneralUtility::makeInstance(BackendGroupRestriction::class));
+        $statementParts = $queryParser->parseQuery($query);
+        $tableName = array_values($statementParts['tables'])[0];
+        $beGroupRestriction = (string)GeneralUtility::makeInstance(BackendGroupRestriction::class, $tableName);
 
-        return $query->statement($queryBuilder->getSQL(), $queryBuilder->getParameters())->execute();
+        if ($beGroupRestriction) {
+            $statementParts['additionalWhereClause'][] = $beGroupRestriction;
+        }
+
+        $statementParts = [
+            'selectFields' => implode(' ', $statementParts['keywords']) . ' ' . implode(',', $statementParts['fields']),
+            'fromTable' => implode(' ', $statementParts['tables']) . ' ' . implode(' ', $statementParts['unions']),
+            'whereClause' => (!empty($statementParts['where']) ? implode('', $statementParts['where']) : '1')
+                . (!empty($statementParts['additionalWhereClause'])
+                    ? ' AND ' . implode(' AND ', $statementParts['additionalWhereClause'])
+                    : ''
+                ),
+            'orderBy' => (!empty($statementParts['orderings']) ? implode(', ', $statementParts['orderings']) : ''),
+            'limit' => ($statementParts['offset'] ? $statementParts['offset'] . ', ' : '')
+                . ($statementParts['limit'] ? $statementParts['limit'] : '')
+        ];
+
+        $sql = $GLOBALS['TYPO3_DB']->SELECTquery(
+            $statementParts['selectFields'],
+            $statementParts['fromTable'],
+            $statementParts['whereClause'],
+            '',
+            $statementParts['orderBy'],
+            $statementParts['limit']
+        );
+
+        return $query->statement($sql)->execute();
     }
 }

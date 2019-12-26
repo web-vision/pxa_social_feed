@@ -322,7 +322,7 @@ class AdministrationController extends ActionController
      * @param AbstractBackendRepository $repository
      * @return QueryResultInterface
      */
-    protected function findAllByRepository(AbstractBackendRepository $repository): QueryResultInterface
+    protected function findAllByRepository(AbstractBackendRepository $repository)
     {
         return ConfigurationUtility::isFeatureEnabled('editorRestriction')
             ? $repository->findAllBackendGroupRestriction()
@@ -335,6 +335,10 @@ class AdministrationController extends ActionController
      */
     protected function assignBEGroups()
     {
+        if (!ConfigurationUtility::isFeatureEnabled('editorRestriction')) {
+            return;
+        }
+
         /** @var BackendUserAuthentication $beUser */
         $beUser = $GLOBALS['BE_USER'];
         $groups = $beUser->isAdmin()

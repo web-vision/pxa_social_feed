@@ -1,10 +1,6 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Utility;
-
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Read plugin configuration
@@ -17,12 +13,16 @@ class ConfigurationUtility
      * Get extension configuration
      *
      * @return array
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
      */
-    public static function getExtensionConfiguration(): array
+    public static function getExtensionConfiguration()
     {
-        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('pxa_social_feed');
+        $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pxa_social_feed']);
+
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        return $settings;
     }
 
     /**
@@ -31,8 +31,13 @@ class ConfigurationUtility
      * @param string $feature
      * @return bool
      */
-    public static function isFeatureEnabled(string $feature): bool
+    public static function isFeatureEnabled($feature)
     {
-        return boolval(static::getExtensionConfiguration()[$feature] ?? false);
+        $settings = static::getExtensionConfiguration();
+        if (isset($settings[$feature])) {
+            return (bool)$settings[$feature];
+        }
+
+        return false;
     }
 }

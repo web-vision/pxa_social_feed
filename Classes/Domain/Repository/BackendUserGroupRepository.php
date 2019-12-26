@@ -1,9 +1,7 @@
 <?php
-declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Domain\Repository;
 
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -19,9 +17,10 @@ class BackendUserGroupRepository
      */
     public function findAll()
     {
-        return GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('be_groups')
-            ->select(['*'], 'be_groups')
-            ->fetchAll();
+        return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+            '*',
+            'be_groups',
+            ''
+        );
     }
 }
