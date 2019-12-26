@@ -73,7 +73,7 @@ class Token extends AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\BackendUserGroup>
      * @lazy
      */
-    protected $beGroup= null;
+    protected $beGroup = null;
 
     /**
      * @var string
@@ -402,6 +402,16 @@ class Token extends AbstractEntity
         }
 
         return $type;
+    }
+
+    /**
+     * Check if facebook or instagram
+     *
+     * @return bool
+     */
+    public function isFacebookOrInstagramType()
+    {
+        return $this->isFacebookType() || $this->isInstagramType();
     }
 
     /**

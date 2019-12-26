@@ -71,14 +71,6 @@ class FacebookAccessTokenExpireService
      */
     public function tokenRequireCheck()
     {
-        return $this->isFacebookOrInstagramType();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFacebookOrInstagramType()
-    {
-        return $this->token->isFacebookType() || $this->token->isInstagramType();
+        return $this->token->isFacebookOrInstagramType();
     }
 }
