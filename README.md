@@ -1,6 +1,8 @@
 # Pixelant #
 [![Build Status](https://travis-ci.org/pixelant/pxa_social_feed.svg?branch=master)](https://travis-ci.org/pixelant/pxa_social_feed)  
   
+Fork to support TYPO3 10 LTS
+  
 ### Pxa Social Feed ###
   
 Add Facebook, Instagram, Twitter, and YouTube feeds to your website.
